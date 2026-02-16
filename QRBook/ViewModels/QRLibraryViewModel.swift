@@ -20,6 +20,30 @@ class QRLibraryViewModel {
     var showCreateSheet = false
     var filterFolder: String? = nil
 
+    var isSelectMode = false
+    var selectedIds: Set<UUID> = []
+
+    func toggleSelection(_ id: UUID) {
+        if selectedIds.contains(id) {
+            selectedIds.remove(id)
+        } else {
+            selectedIds.insert(id)
+        }
+    }
+
+    func selectAll(_ codes: [QRCode]) {
+        selectedIds = Set(codes.map(\.id))
+    }
+
+    func deselectAll() {
+        selectedIds.removeAll()
+    }
+
+    func exitSelectMode() {
+        isSelectMode = false
+        selectedIds.removeAll()
+    }
+
     func filteredAndSorted(_ qrCodes: [QRCode], viewMode: ViewMode) -> [QRCode] {
         var result = qrCodes
 

@@ -12,6 +12,7 @@ struct QRLibraryView: View {
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var viewModel = QRLibraryViewModel()
     @State private var selectedQR: QRCode?
+    @State private var showDeleteConfirm = false
     @Environment(\.modelContext) private var modelContext
     private var displayedCodes: [QRCode] {
         viewModel.filteredAndSorted(qrCodes, viewMode: viewMode)
@@ -40,17 +41,36 @@ struct QRLibraryView: View {
             .navigationTitle(navigationTitle)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        viewModel.showCreateSheet = true
-                    } label: {
-                        Label("Create", systemImage: "plus")
+                    if viewModel.isSelectMode {
+                        Button("Done") { viewModel.exitSelectMode() }
+                    } else {
+                        HStack(spacing: 16) {
+                            Button { viewModel.isSelectMode = true } label: {
+                                Image(systemName: "checkmark.circle")
+                            }
+                            Button { viewModel.showCreateSheet = true } label: {
+                                Image(systemName: "plus")
+                            }
+                        }
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
-                        Image(systemName: "gearshape")
+                    if viewModel.isSelectMode {
+                        Button {
+                            if viewModel.selectedIds.count == displayedCodes.count {
+                                viewModel.deselectAll()
+                            } else {
+                                viewModel.selectAll(displayedCodes)
+                            }
+                        } label: {
+                            Text(viewModel.selectedIds.count == displayedCodes.count ? "Deselect All" : "Select All")
+                        }
+                    } else {
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            Image(systemName: "gearshape")
+                        }
                     }
                 }
             }
@@ -155,7 +175,19 @@ struct QRLibraryView: View {
                 ) {
                     ForEach(displayedCodes) { qrCode in
                         QRCardView(qrCode: qrCode) {
-                            selectedQR = qrCode
+                            if viewModel.isSelectMode {
+                                viewModel.toggleSelection(qrCode.id)
+                            } else {
+                                selectedQR = qrCode
+                            }
+                        }
+                        .overlay(alignment: .topLeading) {
+                            if viewModel.isSelectMode {
+                                Image(systemName: viewModel.selectedIds.contains(qrCode.id) ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(viewModel.selectedIds.contains(qrCode.id) ? Color.electricViolet : .secondary)
+                                    .font(.title3)
+                                    .padding(8)
+                            }
                         }
                     }
                 }
@@ -164,6 +196,44 @@ struct QRLibraryView: View {
         }
         .refreshable {
             // SwiftData auto-syncs via iCloud, but this provides pull-to-refresh UX
+        }
+        .safeAreaInset(edge: .bottom) {
+            if viewModel.isSelectMode && !viewModel.selectedIds.isEmpty {
+                HStack(spacing: 20) {
+                    Button(role: .destructive) {
+                        showDeleteConfirm = true
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                            .font(.subheadline)
+                    }
+
+                    if !folders.isEmpty {
+                        Menu {
+                            Button("None") { batchMoveToFolder("") }
+                            ForEach(folders) { folder in
+                                Button(folder.name) { batchMoveToFolder(folder.name) }
+                            }
+                        } label: {
+                            Label("Move", systemImage: "folder")
+                                .font(.subheadline)
+                        }
+                    }
+
+                    Spacer()
+
+                    Text("\(viewModel.selectedIds.count) selected")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+            }
+        }
+        .alert("Delete Selected?", isPresented: $showDeleteConfirm) {
+            Button("Delete", role: .destructive) { batchDelete() }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete \(viewModel.selectedIds.count) QR code(s)? This cannot be undone.")
         }
     }
 
@@ -197,5 +267,22 @@ struct QRLibraryView: View {
             .buttonStyle(.bordered)
             .tint(Color.electricViolet)
         }
+    }
+
+    private func batchDelete() {
+        for qr in qrCodes where viewModel.selectedIds.contains(qr.id) {
+            modelContext.delete(qr)
+        }
+        viewModel.exitSelectMode()
+        HapticManager.success()
+    }
+
+    private func batchMoveToFolder(_ folder: String) {
+        for qr in qrCodes where viewModel.selectedIds.contains(qr.id) {
+            qr.folderName = folder
+            qr.updatedAt = .now
+        }
+        viewModel.exitSelectMode()
+        HapticManager.success()
     }
 }
