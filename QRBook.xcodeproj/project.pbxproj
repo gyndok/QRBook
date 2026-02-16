@@ -37,6 +37,7 @@
 		BB000055 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000055 /* HapticManager.swift */; };
 		BB000056 /* QRDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000056 /* QRDataDecoder.swift */; };
 		BB000057 /* EditQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000057 /* EditQRView.swift */; };
+		BB000058 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000058 /* ScannerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		CC000055 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		CC000056 /* QRDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRDataDecoder.swift; sourceTree = "<group>"; };
 		CC000057 /* EditQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQRView.swift; sourceTree = "<group>"; };
+		CC000058 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				DD000008 /* Fullscreen */,
 				DD000009 /* Settings */,
 				DD000011 /* Folders */,
+				DD000012 /* Scanner */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,6 +220,14 @@
 				CC000054 /* ManageFoldersView.swift */,
 			);
 			path = Folders;
+			sourceTree = "<group>";
+		};
+		DD000012 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				CC000058 /* ScannerView.swift */,
+			);
+			path = Scanner;
 			sourceTree = "<group>";
 		};
 		DD000010 /* Theme */ = {
@@ -327,6 +338,7 @@
 				BB000055 /* HapticManager.swift in Sources */,
 				BB000056 /* QRDataDecoder.swift in Sources */,
 				BB000057 /* EditQRView.swift in Sources */,
+				BB000058 /* ScannerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +357,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "QR Book uses the camera to scan QR codes.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Book needs access to save QR code images to your photo library.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -375,6 +388,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "QR Book uses the camera to scan QR codes.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Book needs access to save QR code images to your photo library.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

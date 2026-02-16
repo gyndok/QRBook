@@ -9,6 +9,9 @@ struct CreateQRView: View {
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var isCreating = false
 
+    var prefillData: String?
+    var prefillType: QRType?
+
     var body: some View {
         NavigationStack {
             Form {
@@ -127,6 +130,29 @@ struct CreateQRView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Color.cardBg)
+            .onAppear {
+                if let type = prefillType {
+                    viewModel.selectedType = type
+                }
+                if let data = prefillData {
+                    switch viewModel.selectedType {
+                    case .wifi:
+                        if let wifi = QRDataDecoder.decodeWiFi(from: data) {
+                            viewModel.wifiData = wifi
+                        }
+                    case .contact:
+                        if let contact = QRDataDecoder.decodeContact(from: data) {
+                            viewModel.contactData = contact
+                        }
+                    case .calendar:
+                        if let cal = QRDataDecoder.decodeCalendarEvent(from: data) {
+                            viewModel.calendarData = cal
+                        }
+                    default:
+                        viewModel.data = data
+                    }
+                }
+            }
         }
         .presentationBackground(Color.cardBg)
     }

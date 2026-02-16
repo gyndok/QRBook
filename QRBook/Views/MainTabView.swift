@@ -5,11 +5,12 @@ struct MainTabView: View {
     @State private var selectedTab: Tab = .library
 
     enum Tab: String, CaseIterable {
-        case library, favorites, recent, flyers
+        case library, scan, favorites, recent, flyers
 
         var label: String {
             switch self {
             case .library: "Library"
+            case .scan: "Scan"
             case .favorites: "Favorites"
             case .recent: "Recent"
             case .flyers: "Flyers"
@@ -19,6 +20,7 @@ struct MainTabView: View {
         var icon: String {
             switch self {
             case .library: "square.grid.2x2"
+            case .scan: "camera.viewfinder"
             case .favorites: "heart"
             case .recent: "clock"
             case .flyers: "doc.text"
@@ -55,6 +57,8 @@ struct MainTabView: View {
                     switch tab {
                     case .library:
                         QRLibraryView(viewMode: .all)
+                    case .scan:
+                        ScannerView()
                     case .favorites:
                         QRLibraryView(viewMode: .favorites)
                     case .recent:
