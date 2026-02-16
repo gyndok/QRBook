@@ -118,6 +118,24 @@ struct QRCardView: View {
         .contextMenu {
             Button { onTap() } label: { Label("View Fullscreen", systemImage: "arrow.up.left.and.arrow.down.right") }
             Button { showEditSheet = true } label: { Label("Edit", systemImage: "pencil") }
+            Button {
+                let copy = QRCode(
+                    title: qrCode.title + " (Copy)",
+                    data: qrCode.data,
+                    type: qrCode.type,
+                    tags: qrCode.tags,
+                    isFavorite: qrCode.isFavorite,
+                    errorCorrection: qrCode.errorCorrection,
+                    sizePx: qrCode.sizePx,
+                    brightnessBoostDefault: qrCode.brightnessBoostDefault,
+                    folderName: qrCode.folderName,
+                    foregroundHex: qrCode.foregroundHex,
+                    backgroundHex: qrCode.backgroundHex,
+                    logoImageData: qrCode.logoImageData
+                )
+                modelContext.insert(copy)
+                HapticManager.success()
+            } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
             Button { UIPasteboard.general.string = qrCode.data } label: { Label("Copy Data", systemImage: "doc.on.doc") }
             ShareLink(item: qrCode.data) { Label("Share", systemImage: "square.and.arrow.up") }
             if !folders.isEmpty {
