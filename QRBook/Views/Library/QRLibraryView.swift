@@ -9,11 +9,10 @@ struct QRLibraryView: View {
     let viewMode: ViewMode
 
     @Query(sort: \QRCode.createdAt, order: .reverse) private var qrCodes: [QRCode]
+    @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var viewModel = QRLibraryViewModel()
     @State private var selectedQR: QRCode?
     @Environment(\.modelContext) private var modelContext
-    @State private var appeared = false
-
     private var displayedCodes: [QRCode] {
         viewModel.filteredAndSorted(qrCodes, viewMode: viewMode)
     }
@@ -74,6 +73,30 @@ struct QRLibraryView: View {
     private var qrGrid: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
+                // Folder bar
+                if !folders.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            FilterChip(
+                                label: "All",
+                                isSelected: viewModel.filterFolder == nil
+                            ) {
+                                viewModel.filterFolder = nil
+                            }
+                            ForEach(folders) { folder in
+                                FilterChip(
+                                    label: folder.name,
+                                    isSelected: viewModel.filterFolder == folder.name
+                                ) {
+                                    viewModel.filterFolder = viewModel.filterFolder == folder.name ? nil : folder.name
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.vertical, 4)
+                }
+
                 // Sort and filter bar
                 HStack {
                     Menu {
@@ -130,17 +153,10 @@ struct QRLibraryView: View {
                     ],
                     spacing: 12
                 ) {
-                    ForEach(Array(displayedCodes.enumerated()), id: \.element.id) { index, qrCode in
+                    ForEach(displayedCodes) { qrCode in
                         QRCardView(qrCode: qrCode) {
                             selectedQR = qrCode
                         }
-                        .opacity(appeared ? 1 : 0)
-                        .offset(y: appeared ? 0 : 20)
-                        .animation(
-                            .spring(response: 0.4, dampingFraction: 0.8)
-                                .delay(Double(index) * 0.05),
-                            value: appeared
-                        )
                     }
                 }
                 .padding(.horizontal)
@@ -148,11 +164,6 @@ struct QRLibraryView: View {
         }
         .refreshable {
             // SwiftData auto-syncs via iCloud, but this provides pull-to-refresh UX
-        }
-        .onAppear {
-            if !appeared {
-                appeared = true
-            }
         }
     }
 

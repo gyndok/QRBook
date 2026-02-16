@@ -1,8 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct QRCardView: View {
     @Bindable var qrCode: QRCode
     let onTap: () -> Void
+    @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -115,6 +117,22 @@ struct QRCardView: View {
             Button { onTap() } label: { Label("View Fullscreen", systemImage: "arrow.up.left.and.arrow.down.right") }
             Button { UIPasteboard.general.string = qrCode.data } label: { Label("Copy Data", systemImage: "doc.on.doc") }
             ShareLink(item: qrCode.data) { Label("Share", systemImage: "square.and.arrow.up") }
+            if !folders.isEmpty {
+                Menu {
+                    Button("None") {
+                        qrCode.folderName = ""
+                        qrCode.updatedAt = .now
+                    }
+                    ForEach(folders) { folder in
+                        Button(folder.name) {
+                            qrCode.folderName = folder.name
+                            qrCode.updatedAt = .now
+                        }
+                    }
+                } label: {
+                    Label("Move to Folder", systemImage: "folder")
+                }
+            }
             Divider()
             Button(role: .destructive) {
                 modelContext.delete(qrCode)

@@ -18,6 +18,7 @@ class QRLibraryViewModel {
     var filterTags: Set<String> = []
     var showFilterSheet = false
     var showCreateSheet = false
+    var filterFolder: String? = nil
 
     func filteredAndSorted(_ qrCodes: [QRCode], viewMode: ViewMode) -> [QRCode] {
         var result = qrCodes
@@ -61,6 +62,11 @@ class QRLibraryViewModel {
             }
         }
 
+        // Folder filter
+        if let filterFolder {
+            result = result.filter { $0.folderName == filterFolder }
+        }
+
         // Sort
         switch sortOption {
         case .lastUsed:
@@ -81,6 +87,7 @@ class QRLibraryViewModel {
         if filterType != nil { count += 1 }
         if filterFavoritesOnly { count += 1 }
         if !filterTags.isEmpty { count += 1 }
+        if filterFolder != nil { count += 1 }
         return count
     }
 
@@ -89,6 +96,7 @@ class QRLibraryViewModel {
         filterType = nil
         filterFavoritesOnly = false
         filterTags = []
+        filterFolder = nil
     }
 
     func allTags(from qrCodes: [QRCode]) -> [String] {

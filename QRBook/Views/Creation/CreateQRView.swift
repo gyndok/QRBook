@@ -6,6 +6,7 @@ struct CreateQRView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = QRCreationViewModel()
+    @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var isCreating = false
 
     var body: some View {
@@ -64,6 +65,18 @@ struct CreateQRView: View {
                             Image(systemName: "plus.circle.fill")
                         }
                         .disabled(viewModel.newTag.trimmingCharacters(in: .whitespaces).isEmpty)
+                    }
+                }
+
+                // Folder
+                if !folders.isEmpty {
+                    Section("Folder") {
+                        Picker("Folder", selection: $viewModel.folderName) {
+                            Text("None").tag("")
+                            ForEach(folders) { folder in
+                                Label(folder.name, systemImage: folder.iconName).tag(folder.name)
+                            }
+                        }
                     }
                 }
 

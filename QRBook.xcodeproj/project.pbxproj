@@ -33,6 +33,7 @@
 		BB000051 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000051 /* Folder.swift */; };
 		BB000052 /* ScanEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000052 /* ScanEvent.swift */; };
 		BB000053 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000053 /* AppearanceSettingsView.swift */; };
+		BB000054 /* ManageFoldersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000054 /* ManageFoldersView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		CC000051 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		CC000052 /* ScanEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEvent.swift; sourceTree = "<group>"; };
 		CC000053 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		CC000054 /* ManageFoldersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFoldersView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 				DD000007 /* Creation */,
 				DD000008 /* Fullscreen */,
 				DD000009 /* Settings */,
+				DD000011 /* Folders */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -197,6 +200,14 @@
 				CC000053 /* AppearanceSettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		DD000011 /* Folders */ = {
+			isa = PBXGroup;
+			children = (
+				CC000054 /* ManageFoldersView.swift */,
+			);
+			path = Folders;
 			sourceTree = "<group>";
 		};
 		DD000010 /* Theme */ = {
@@ -303,6 +314,7 @@
 				BB000051 /* Folder.swift in Sources */,
 				BB000052 /* ScanEvent.swift in Sources */,
 				BB000053 /* AppearanceSettingsView.swift in Sources */,
+				BB000054 /* ManageFoldersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

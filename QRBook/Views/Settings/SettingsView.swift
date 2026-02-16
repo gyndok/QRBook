@@ -56,6 +56,12 @@ struct SettingsView: View {
             // Data
             Section("Data") {
                 NavigationLink {
+                    ManageFoldersView()
+                } label: {
+                    Label("Manage Folders", systemImage: "folder")
+                }
+
+                NavigationLink {
                     BulkImportView()
                 } label: {
                     Label("Bulk Import", systemImage: "square.and.arrow.down.on.square")
