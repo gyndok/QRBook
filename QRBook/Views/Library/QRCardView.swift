@@ -6,6 +6,7 @@ struct QRCardView: View {
     let onTap: () -> Void
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @Environment(\.modelContext) private var modelContext
+    @State private var showEditSheet = false
 
     var body: some View {
         Button(action: onTap) {
@@ -116,6 +117,7 @@ struct QRCardView: View {
         .pressStyle()
         .contextMenu {
             Button { onTap() } label: { Label("View Fullscreen", systemImage: "arrow.up.left.and.arrow.down.right") }
+            Button { showEditSheet = true } label: { Label("Edit", systemImage: "pencil") }
             Button { UIPasteboard.general.string = qrCode.data } label: { Label("Copy Data", systemImage: "doc.on.doc") }
             ShareLink(item: qrCode.data) { Label("Share", systemImage: "square.and.arrow.up") }
             if !folders.isEmpty {
@@ -138,6 +140,9 @@ struct QRCardView: View {
             Button(role: .destructive) {
                 modelContext.delete(qrCode)
             } label: { Label("Delete", systemImage: "trash") }
+        }
+        .sheet(isPresented: $showEditSheet) {
+            EditQRView(qrCode: qrCode)
         }
     }
 }

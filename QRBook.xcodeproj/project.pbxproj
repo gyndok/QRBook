@@ -36,6 +36,7 @@
 		BB000054 /* ManageFoldersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000054 /* ManageFoldersView.swift */; };
 		BB000055 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000055 /* HapticManager.swift */; };
 		BB000056 /* QRDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000056 /* QRDataDecoder.swift */; };
+		BB000057 /* EditQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000057 /* EditQRView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		CC000054 /* ManageFoldersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFoldersView.swift; sourceTree = "<group>"; };
 		CC000055 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		CC000056 /* QRDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRDataDecoder.swift; sourceTree = "<group>"; };
+		CC000057 /* EditQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditQRView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				CC000010 /* CreateQRView.swift */,
+				CC000057 /* EditQRView.swift */,
 				CC000011 /* WiFiFormView.swift */,
 				CC000012 /* ContactFormView.swift */,
 				CC000013 /* CalendarFormView.swift */,
@@ -323,6 +326,7 @@
 				BB000054 /* ManageFoldersView.swift in Sources */,
 				BB000055 /* HapticManager.swift in Sources */,
 				BB000056 /* QRDataDecoder.swift in Sources */,
+				BB000057 /* EditQRView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

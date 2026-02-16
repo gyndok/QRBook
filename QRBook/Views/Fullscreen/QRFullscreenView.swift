@@ -8,6 +8,7 @@ struct QRFullscreenView: View {
     @State private var brightnessBoost = false
     @State private var previousBrightness: CGFloat = 0.5
     @State private var dragOffset: CGFloat = 0
+    @State private var showEditSheet = false
 
     private var currentQR: QRCode {
         guard currentIndex >= 0, currentIndex < allQRCodes.count else { return qrCode }
@@ -29,6 +30,13 @@ struct QRFullscreenView: View {
                 HStack {
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .padding(8)
+                    }
+
+                    Button { showEditSheet = true } label: {
+                        Image(systemName: "pencil")
                             .font(.title3)
                             .foregroundStyle(.white)
                             .padding(8)
@@ -147,6 +155,9 @@ struct QRFullscreenView: View {
             UIApplication.shared.isIdleTimerDisabled = false
         }
         .statusBarHidden()
+        .sheet(isPresented: $showEditSheet) {
+            EditQRView(qrCode: currentQR)
+        }
     }
 
     private func toggleBrightness() {
