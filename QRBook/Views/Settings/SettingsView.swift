@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage("defaultAutoFavorite") private var defaultAutoFavorite = false
 
     @Query private var qrCodes: [QRCode]
+    @Query private var scanEvents: [ScanEvent]
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -73,6 +74,13 @@ struct SettingsView: View {
                     Label("Export All QR Codes", systemImage: "square.and.arrow.up")
                 }
                 .disabled(qrCodes.isEmpty)
+
+                Button(role: .destructive) {
+                    clearHistory()
+                } label: {
+                    Label("Clear Scan History", systemImage: "clock.arrow.circlepath")
+                }
+                .disabled(scanEvents.isEmpty)
             }
 
             // About
@@ -82,6 +90,13 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+    }
+
+    private func clearHistory() {
+        for event in scanEvents {
+            modelContext.delete(event)
+        }
+        HapticManager.success()
     }
 
     private func exportData() {

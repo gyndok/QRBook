@@ -1,14 +1,17 @@
 import SwiftUI
+import SwiftData
 
 struct QRFullscreenView: View {
     @Bindable var qrCode: QRCode
     let allQRCodes: [QRCode]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var currentIndex: Int = 0
     @State private var brightnessBoost = false
     @State private var previousBrightness: CGFloat = 0.5
     @State private var dragOffset: CGFloat = 0
     @State private var showEditSheet = false
+    @State private var showHistory = false
 
     private var currentQR: QRCode {
         guard currentIndex >= 0, currentIndex < allQRCodes.count else { return qrCode }
@@ -126,6 +129,12 @@ struct QRFullscreenView: View {
 
                 // Bottom info
                 VStack(spacing: 4) {
+                    Button { showHistory = true } label: {
+                        Label("Scan History", systemImage: "clock.arrow.circlepath")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
+
                     if allQRCodes.count > 1 {
                         Text("\(currentIndex + 1) of \(allQRCodes.count)")
                             .font(.caption)
@@ -158,6 +167,16 @@ struct QRFullscreenView: View {
         .sheet(isPresented: $showEditSheet) {
             EditQRView(qrCode: currentQR)
         }
+        .sheet(isPresented: $showHistory) {
+            NavigationStack {
+                QRHistoryView(qrCodeId: currentQR.id)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") { showHistory = false }
+                        }
+                    }
+            }
+        }
     }
 
     private func toggleBrightness() {
@@ -173,6 +192,8 @@ struct QRFullscreenView: View {
     private func recordScan() {
         currentQR.scanCount += 1
         currentQR.lastUsed = .now
+        let event = ScanEvent(qrCodeId: currentQR.id)
+        modelContext.insert(event)
     }
 
     private func saveToPhotos() {

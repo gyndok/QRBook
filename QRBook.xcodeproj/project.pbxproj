@@ -44,6 +44,7 @@
 		BB000064 /* ShowQRCodeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000064 /* ShowQRCodeIntent.swift */; };
 		BB000065 /* CreateQRCodeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000065 /* CreateQRCodeIntent.swift */; };
 		BB000066 /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000066 /* AppShortcuts.swift */; };
+		BB000067 /* QRHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000067 /* QRHistoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		CC000064 /* ShowQRCodeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowQRCodeIntent.swift; sourceTree = "<group>"; };
 		CC000065 /* CreateQRCodeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRCodeIntent.swift; sourceTree = "<group>"; };
 		CC000066 /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
+		CC000067 /* QRHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRHistoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				CC000015 /* QRFullscreenView.swift */,
+				CC000067 /* QRHistoryView.swift */,
 			);
 			path = Fullscreen;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				BB000064 /* ShowQRCodeIntent.swift in Sources */,
 				BB000065 /* CreateQRCodeIntent.swift in Sources */,
 				BB000066 /* AppShortcuts.swift in Sources */,
+				BB000067 /* QRHistoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
