@@ -26,6 +26,9 @@
 		BB000017 /* QRLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000017 /* QRLibraryViewModel.swift */; };
 		BB000018 /* QRCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000018 /* QRCreationViewModel.swift */; };
 		BB000020 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC000020 /* Assets.xcassets */; };
+		BB000030 /* BulkImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000030 /* BulkImportService.swift */; };
+		BB000031 /* BulkImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000031 /* BulkImportView.swift */; };
+		BB000040 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000040 /* AppTheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +53,9 @@
 		CC000018 /* QRCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCreationViewModel.swift; sourceTree = "<group>"; };
 		CC000020 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC000021 /* QRBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QRBook.entitlements; sourceTree = "<group>"; };
+		CC000030 /* BulkImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkImportService.swift; sourceTree = "<group>"; };
+		CC000031 /* BulkImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkImportView.swift; sourceTree = "<group>"; };
+		CC000040 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,7 @@
 			children = (
 				CC000001 /* QRBookApp.swift */,
 				CC000021 /* QRBook.entitlements */,
+				DD000010 /* Theme */,
 				DD000001 /* Models */,
 				DD000002 /* ViewModels */,
 				DD000003 /* Views */,
@@ -128,6 +135,7 @@
 				CC000003 /* QRGenerator.swift */,
 				CC000004 /* QRDataEncoder.swift */,
 				CC000005 /* Validation.swift */,
+				CC000030 /* BulkImportService.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -174,8 +182,17 @@
 			isa = PBXGroup;
 			children = (
 				CC000016 /* SettingsView.swift */,
+				CC000031 /* BulkImportView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		DD000010 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				CC000040 /* AppTheme.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,6 +284,9 @@
 				BB000016 /* SettingsView.swift in Sources */,
 				BB000017 /* QRLibraryViewModel.swift in Sources */,
 				BB000018 /* QRCreationViewModel.swift in Sources */,
+				BB000030 /* BulkImportService.swift in Sources */,
+				BB000031 /* BulkImportView.swift in Sources */,
+				BB000040 /* AppTheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

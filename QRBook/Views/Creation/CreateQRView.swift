@@ -51,7 +51,7 @@ struct CreateQRView: View {
                                 }
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
-                                .background(.secondary.opacity(0.15))
+                                .background(Color.electricViolet.opacity(0.10))
                                 .clipShape(Capsule())
                             }
                         }
@@ -107,7 +107,10 @@ struct CreateQRView: View {
                         .disabled(isCreating)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.cardBg)
         }
+        .presentationBackground(Color.cardBg)
     }
 
     @ViewBuilder
@@ -185,7 +188,7 @@ struct TypeCard: View {
                 Image(systemName: type.icon)
                     .font(.subheadline)
                     .frame(width: 28, height: 28)
-                    .background(isSelected ? Color.accentColor : Color.secondary.opacity(0.12))
+                    .background(isSelected ? Color.electricViolet : Color.secondary.opacity(0.12))
                     .foregroundStyle(isSelected ? .white : .primary)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
 
@@ -201,11 +204,11 @@ struct TypeCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(8)
-            .background(isSelected ? Color.accentColor.opacity(0.08) : Color.clear)
+            .background(isSelected ? Color.electricViolet.opacity(0.08) : Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(isSelected ? Color.accentColor : Color.secondary.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+                    .stroke(isSelected ? Color.electricViolet : Color.subtleBorder, lineWidth: isSelected ? 2 : 1)
             )
         }
         .buttonStyle(.plain)

@@ -14,8 +14,14 @@ struct SettingsView: View {
         List {
             // Stats
             Section("Account") {
-                LabeledContent("Total QR Codes", value: "\(qrCodes.count)")
-                LabeledContent("Favorites", value: "\(qrCodes.filter(\.isFavorite).count)")
+                LabeledContent("Total QR Codes") {
+                    Text("\(qrCodes.count)")
+                        .foregroundStyle(Color.electricViolet)
+                }
+                LabeledContent("Favorites") {
+                    Text("\(qrCodes.filter(\.isFavorite).count)")
+                        .foregroundStyle(Color.electricViolet)
+                }
             }
 
             // Defaults
@@ -34,11 +40,19 @@ struct SettingsView: View {
                 }
 
                 Toggle("Brightness Boost by Default", isOn: $defaultBrightnessBoost)
+                    .tint(Color.electricViolet)
                 Toggle("Auto-Favorite New QR Codes", isOn: $defaultAutoFavorite)
+                    .tint(Color.electricViolet)
             }
 
             // Data
             Section("Data") {
+                NavigationLink {
+                    BulkImportView()
+                } label: {
+                    Label("Bulk Import", systemImage: "square.and.arrow.down.on.square")
+                }
+
                 Button {
                     exportData()
                 } label: {

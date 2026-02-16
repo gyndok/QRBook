@@ -16,10 +16,13 @@ struct QRFullscreenView: View {
 
     var body: some View {
         ZStack {
-            // Dark background
+            // Dark background with radial glow
             Color.black
                 .ignoresSafeArea()
                 .onTapGesture { dismiss() }
+
+            AppTheme.fullscreenRadialGlow
+                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // Top bar
@@ -82,6 +85,7 @@ struct QRFullscreenView: View {
                         .padding(32)
                         .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: Color.electricViolet.opacity(0.3), radius: 30)
                         .shadow(radius: 20)
                         .offset(x: dragOffset)
                         .gesture(

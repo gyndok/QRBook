@@ -12,6 +12,7 @@ struct QRLibraryView: View {
     @State private var viewModel = QRLibraryViewModel()
     @State private var selectedQR: QRCode?
     @Environment(\.modelContext) private var modelContext
+    @State private var appeared = false
 
     private var displayedCodes: [QRCode] {
         viewModel.filteredAndSorted(qrCodes, viewMode: viewMode)
@@ -36,6 +37,7 @@ struct QRLibraryView: View {
                     qrGrid
                 }
             }
+            .background(Color.appBg)
             .navigationTitle(navigationTitle)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -112,7 +114,7 @@ struct QRLibraryView: View {
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
                                 .frame(width: 16, height: 16)
-                                .background(.red, in: Circle())
+                                .background(Color.electricViolet, in: Circle())
                                 .offset(x: 8, y: -8)
                         }
                     }
@@ -128,10 +130,17 @@ struct QRLibraryView: View {
                     ],
                     spacing: 12
                 ) {
-                    ForEach(displayedCodes) { qrCode in
+                    ForEach(Array(displayedCodes.enumerated()), id: \.element.id) { index, qrCode in
                         QRCardView(qrCode: qrCode) {
                             selectedQR = qrCode
                         }
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 20)
+                        .animation(
+                            .spring(response: 0.4, dampingFraction: 0.8)
+                                .delay(Double(index) * 0.05),
+                            value: appeared
+                        )
                     }
                 }
                 .padding(.horizontal)
@@ -140,13 +149,19 @@ struct QRLibraryView: View {
         .refreshable {
             // SwiftData auto-syncs via iCloud, but this provides pull-to-refresh UX
         }
+        .onAppear {
+            if !appeared {
+                appeared = true
+            }
+        }
     }
 
     private var emptyState: some View {
         ContentUnavailableView {
             Label("No QR Codes Yet", systemImage: "qrcode")
+                .foregroundStyle(Color.electricViolet)
         } description: {
-            Text("Create your first QR code to get started. You can generate QR codes for URLs, text, WiFi networks, contacts, and more.")
+            Text("No QR codes yet \u{2014} tap + to create your first.")
         } actions: {
             Button {
                 viewModel.showCreateSheet = true
@@ -154,12 +169,14 @@ struct QRLibraryView: View {
                 Text("Create QR Code")
             }
             .buttonStyle(.borderedProminent)
+            .tint(Color.electricViolet)
         }
     }
 
     private var noResultsState: some View {
         ContentUnavailableView {
             Label("No Results", systemImage: "magnifyingglass")
+                .foregroundStyle(Color.electricViolet)
         } description: {
             Text("Try adjusting your search or filters.")
         } actions: {
@@ -167,6 +184,7 @@ struct QRLibraryView: View {
                 viewModel.clearFilters()
             }
             .buttonStyle(.bordered)
+            .tint(Color.electricViolet)
         }
     }
 }

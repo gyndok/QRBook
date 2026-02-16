@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct MainTabView: View {
     @State private var selectedTab: Tab = .library
@@ -23,6 +24,28 @@ struct MainTabView: View {
             case .flyers: "doc.text"
             }
         }
+    }
+
+    init() {
+        // Tab bar appearance
+        let tabAppearance = UITabBarAppearance()
+        tabAppearance.configureWithDefaultBackground()
+        tabAppearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterial)
+        UITabBar.appearance().standardAppearance = tabAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabAppearance
+        UITabBar.appearance().unselectedItemTintColor = .secondaryLabel
+
+        // Navigation bar appearance
+        let navAppearance = UINavigationBarAppearance()
+        navAppearance.configureWithDefaultBackground()
+        if let roundedDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .largeTitle)
+            .withDesign(.rounded) {
+            navAppearance.largeTitleTextAttributes = [
+                .font: UIFont(descriptor: roundedDescriptor.withSymbolicTraits(.traitBold) ?? roundedDescriptor, size: 28)
+            ]
+        }
+        UINavigationBar.appearance().standardAppearance = navAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navAppearance
     }
 
     var body: some View {
@@ -59,6 +82,7 @@ struct FlyersPlaceholderView: View {
             )
             .navigationTitle("Flyers")
         }
+        .tint(Color.electricViolet)
     }
 }
 

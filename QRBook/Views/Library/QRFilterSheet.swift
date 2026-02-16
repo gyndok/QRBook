@@ -47,6 +47,7 @@ struct QRFilterSheet: View {
 
                 Section {
                     Toggle("Favorites Only", isOn: $viewModel.filterFavoritesOnly)
+                        .tint(Color.electricViolet)
                 }
             }
             .navigationTitle("Filters")
@@ -61,6 +62,7 @@ struct QRFilterSheet: View {
             }
         }
         .presentationDetents([.medium, .large])
+        .presentationBackground(Color.cardBg)
     }
 }
 
@@ -76,7 +78,7 @@ struct FilterChip: View {
                 .fontWeight(isSelected ? .semibold : .regular)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(isSelected ? Color.accentColor : Color.secondary.opacity(0.12))
+                .background(isSelected ? Color.electricViolet : Color.secondary.opacity(0.12))
                 .foregroundStyle(isSelected ? .white : .primary)
                 .clipShape(Capsule())
         }
