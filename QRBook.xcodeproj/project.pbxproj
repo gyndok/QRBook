@@ -50,6 +50,11 @@
 		BB000074 /* FlyerTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000074 /* FlyerTemplates.swift */; };
 		BB000075 /* FlyerEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000075 /* FlyerEditorView.swift */; };
 		BB000076 /* FlyerGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000076 /* FlyerGalleryView.swift */; };
+		BB000077 /* WatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000077 /* WatchConnector.swift */; };
+		BB000080 /* QRBookWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000080 /* QRBookWatchApp.swift */; };
+		BB000081 /* FavoritesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000081 /* FavoritesListView.swift */; };
+		BB000082 /* WatchQRFullscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000082 /* WatchQRFullscreenView.swift */; };
+		BB000083 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC000083 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +108,12 @@
 		CC000074 /* FlyerTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerTemplates.swift; sourceTree = "<group>"; };
 		CC000075 /* FlyerEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerEditorView.swift; sourceTree = "<group>"; };
 		CC000076 /* FlyerGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerGalleryView.swift; sourceTree = "<group>"; };
+		CC000077 /* WatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnector.swift; sourceTree = "<group>"; };
+		AA000004 /* QRBookWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "QRBookWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000080 /* QRBookWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRBookWatchApp.swift; sourceTree = "<group>"; };
+		CC000081 /* FavoritesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListView.swift; sourceTree = "<group>"; };
+		CC000082 /* WatchQRFullscreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQRFullscreenView.swift; sourceTree = "<group>"; };
+		CC000083 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +138,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA000303 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -136,6 +154,7 @@
 				AA000020 /* QRBook */,
 				DD000013 /* QRBookShareExtension */,
 				DD000015 /* QRBookWidget */,
+				DD000017 /* QRBookWatch Watch App */,
 				AA000030 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -162,6 +181,7 @@
 				AA000001 /* QRBook.app */,
 				AA000002 /* QRBookShareExtension.appex */,
 				AA000003 /* QRBookWidgetExtension.appex */,
+				AA000004 /* QRBookWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,6 +233,7 @@
 				CC000056 /* QRDataDecoder.swift */,
 				CC000063 /* SpotlightIndexer.swift */,
 				CC000068 /* WidgetDataWriter.swift */,
+				CC000077 /* WatchConnector.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -330,6 +351,17 @@
 			path = QRBookWidget;
 			sourceTree = "<group>";
 		};
+		DD000017 /* QRBookWatch Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				CC000080 /* QRBookWatchApp.swift */,
+				CC000081 /* FavoritesListView.swift */,
+				CC000082 /* WatchQRFullscreenView.swift */,
+				CC000083 /* Assets.xcassets */,
+			);
+			path = "QRBookWatch Watch App";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXContainerItemProxy section */
@@ -419,6 +451,23 @@
 			productReference = AA000003 /* QRBookWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		AA000103 /* QRBookWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA000720 /* Build configuration list for PBXNativeTarget "QRBookWatch Watch App" */;
+			buildPhases = (
+				AA000203 /* Sources */,
+				AA000303 /* Frameworks */,
+				AA000403 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "QRBookWatch Watch App";
+			productName = "QRBookWatch Watch App";
+			productReference = AA000004 /* QRBookWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -436,6 +485,9 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					AA000102 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					AA000103 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
@@ -456,6 +508,7 @@
 				AA000100 /* QRBook */,
 				AA000101 /* QRBookShareExtension */,
 				AA000102 /* QRBookWidgetExtension */,
+				AA000103 /* QRBookWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -480,6 +533,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000403 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB000083 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +591,7 @@
 				BB000074 /* FlyerTemplates.swift in Sources */,
 				BB000075 /* FlyerEditorView.swift in Sources */,
 				BB000076 /* FlyerGalleryView.swift in Sources */,
+				BB000077 /* WatchConnector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +608,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB000070 /* QRBookWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000203 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB000080 /* QRBookWatchApp.swift in Sources */,
+				BB000081 /* FavoritesListView.swift in Sources */,
+				BB000082 /* WatchQRFullscreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -856,6 +928,62 @@
 			};
 			name = Release;
 		};
+		AA000721 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "QR Book";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.gyndok.QRBook;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		AA000722 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "QR Book";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.gyndok.QRBook;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -891,6 +1019,15 @@
 			buildConfigurations = (
 				AA000711 /* Debug */,
 				AA000712 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA000720 /* Build configuration list for PBXNativeTarget "QRBookWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA000721 /* Debug */,
+				AA000722 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
