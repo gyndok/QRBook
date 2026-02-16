@@ -29,6 +29,7 @@
 		BB000030 /* BulkImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000030 /* BulkImportService.swift */; };
 		BB000031 /* BulkImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000031 /* BulkImportView.swift */; };
 		BB000040 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000040 /* AppTheme.swift */; };
+		BB000050 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000050 /* SplashView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		CC000030 /* BulkImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkImportService.swift; sourceTree = "<group>"; };
 		CC000031 /* BulkImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkImportView.swift; sourceTree = "<group>"; };
 		CC000040 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		CC000050 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				CC000006 /* MainTabView.swift */,
+				CC000050 /* SplashView.swift */,
 				DD000006 /* Library */,
 				DD000007 /* Creation */,
 				DD000008 /* Fullscreen */,
@@ -287,6 +290,7 @@
 				BB000030 /* BulkImportService.swift in Sources */,
 				BB000031 /* BulkImportView.swift in Sources */,
 				BB000040 /* AppTheme.swift in Sources */,
+				BB000050 /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
