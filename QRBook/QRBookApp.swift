@@ -25,6 +25,6 @@ struct QRBookApp: App {
                 }
             }
         }
-        .modelContainer(for: QRCode.self)
+        .modelContainer(for: [QRCode.self, Folder.self, ScanEvent.self])
     }
 }
