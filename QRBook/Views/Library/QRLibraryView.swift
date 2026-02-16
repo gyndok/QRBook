@@ -11,7 +11,6 @@ struct QRLibraryView: View {
     @Query(sort: \QRCode.createdAt, order: .reverse) private var qrCodes: [QRCode]
     @State private var viewModel = QRLibraryViewModel()
     @State private var selectedQR: QRCode?
-    @State private var showFullscreen = false
     @Environment(\.modelContext) private var modelContext
 
     private var displayedCodes: [QRCode] {
@@ -61,13 +60,11 @@ struct QRLibraryView: View {
             .sheet(isPresented: $viewModel.showFilterSheet) {
                 QRFilterSheet(viewModel: viewModel, allTags: viewModel.allTags(from: qrCodes))
             }
-            .fullScreenCover(isPresented: $showFullscreen) {
-                if let selectedQR {
-                    QRFullscreenView(
-                        qrCode: selectedQR,
-                        allQRCodes: displayedCodes
-                    )
-                }
+            .fullScreenCover(item: $selectedQR) { qr in
+                QRFullscreenView(
+                    qrCode: qr,
+                    allQRCodes: displayedCodes
+                )
             }
         }
     }
@@ -134,7 +131,6 @@ struct QRLibraryView: View {
                     ForEach(displayedCodes) { qrCode in
                         QRCardView(qrCode: qrCode) {
                             selectedQR = qrCode
-                            showFullscreen = true
                         }
                     }
                 }

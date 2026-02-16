@@ -46,7 +46,6 @@ struct QRCardView: View {
                     .frame(height: 120)
                     .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .onTapGesture(perform: onTap)
             }
 
             // Tags
@@ -102,6 +101,8 @@ struct QRCardView: View {
         .background(.background)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
         .contextMenu {
             Button { onTap() } label: { Label("View Fullscreen", systemImage: "arrow.up.left.and.arrow.down.right") }
             Button { UIPasteboard.general.string = qrCode.data } label: { Label("Copy Data", systemImage: "doc.on.doc") }
