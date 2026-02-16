@@ -7,11 +7,60 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB000001 /* QRBookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000001 /* QRBookApp.swift */; };
+		BB000002 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002 /* QRCode.swift */; };
+		BB000003 /* QRGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000003 /* QRGenerator.swift */; };
+		BB000004 /* QRDataEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000004 /* QRDataEncoder.swift */; };
+		BB000005 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000005 /* Validation.swift */; };
+		BB000006 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000006 /* MainTabView.swift */; };
+		BB000007 /* QRLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000007 /* QRLibraryView.swift */; };
+		BB000008 /* QRCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000008 /* QRCardView.swift */; };
+		BB000009 /* QRFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000009 /* QRFilterSheet.swift */; };
+		BB000010 /* CreateQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000010 /* CreateQRView.swift */; };
+		BB000011 /* WiFiFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000011 /* WiFiFormView.swift */; };
+		BB000012 /* ContactFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000012 /* ContactFormView.swift */; };
+		BB000013 /* CalendarFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000013 /* CalendarFormView.swift */; };
+		BB000014 /* PaymentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000014 /* PaymentFormView.swift */; };
+		BB000015 /* QRFullscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000015 /* QRFullscreenView.swift */; };
+		BB000016 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000016 /* SettingsView.swift */; };
+		BB000017 /* QRLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000017 /* QRLibraryViewModel.swift */; };
+		BB000018 /* QRCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000018 /* QRCreationViewModel.swift */; };
+		BB000020 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC000020 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA000001 /* QRBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000001 /* QRBookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRBookApp.swift; sourceTree = "<group>"; };
+		CC000002 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		CC000003 /* QRGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRGenerator.swift; sourceTree = "<group>"; };
+		CC000004 /* QRDataEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRDataEncoder.swift; sourceTree = "<group>"; };
+		CC000005 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
+		CC000006 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		CC000007 /* QRLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRLibraryView.swift; sourceTree = "<group>"; };
+		CC000008 /* QRCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCardView.swift; sourceTree = "<group>"; };
+		CC000009 /* QRFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRFilterSheet.swift; sourceTree = "<group>"; };
+		CC000010 /* CreateQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRView.swift; sourceTree = "<group>"; };
+		CC000011 /* WiFiFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiFormView.swift; sourceTree = "<group>"; };
+		CC000012 /* ContactFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFormView.swift; sourceTree = "<group>"; };
+		CC000013 /* CalendarFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarFormView.swift; sourceTree = "<group>"; };
+		CC000014 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
+		CC000015 /* QRFullscreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRFullscreenView.swift; sourceTree = "<group>"; };
+		CC000016 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		CC000017 /* QRLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRLibraryViewModel.swift; sourceTree = "<group>"; };
+		CC000018 /* QRCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCreationViewModel.swift; sourceTree = "<group>"; };
+		CC000020 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC000021 /* QRBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QRBook.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA000300 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		AA000010 = {
@@ -25,6 +74,13 @@
 		AA000020 /* QRBook */ = {
 			isa = PBXGroup;
 			children = (
+				CC000001 /* QRBookApp.swift */,
+				CC000021 /* QRBook.entitlements */,
+				DD000001 /* Models */,
+				DD000002 /* ViewModels */,
+				DD000003 /* Views */,
+				DD000004 /* Utilities */,
+				DD000005 /* Resources */,
 			);
 			path = QRBook;
 			sourceTree = "<group>";
@@ -35,6 +91,91 @@
 				AA000001 /* QRBook.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DD000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CC000002 /* QRCode.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DD000002 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				CC000017 /* QRLibraryViewModel.swift */,
+				CC000018 /* QRCreationViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		DD000003 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CC000006 /* MainTabView.swift */,
+				DD000006 /* Library */,
+				DD000007 /* Creation */,
+				DD000008 /* Fullscreen */,
+				DD000009 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DD000004 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				CC000003 /* QRGenerator.swift */,
+				CC000004 /* QRDataEncoder.swift */,
+				CC000005 /* Validation.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		DD000005 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CC000020 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DD000006 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				CC000007 /* QRLibraryView.swift */,
+				CC000008 /* QRCardView.swift */,
+				CC000009 /* QRFilterSheet.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		DD000007 /* Creation */ = {
+			isa = PBXGroup;
+			children = (
+				CC000010 /* CreateQRView.swift */,
+				CC000011 /* WiFiFormView.swift */,
+				CC000012 /* ContactFormView.swift */,
+				CC000013 /* CalendarFormView.swift */,
+				CC000014 /* PaymentFormView.swift */,
+			);
+			path = Creation;
+			sourceTree = "<group>";
+		};
+		DD000008 /* Fullscreen */ = {
+			isa = PBXGroup;
+			children = (
+				CC000015 /* QRFullscreenView.swift */,
+			);
+			path = Fullscreen;
+			sourceTree = "<group>";
+		};
+		DD000009 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CC000016 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -51,9 +192,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				AA000020 /* QRBook */,
 			);
 			name = QRBook;
 			packageProductDependencies = (
@@ -95,35 +233,44 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXSourcesBuildPhase section */
-		AA000200 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		AA000300 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXResourcesBuildPhase section */
 		AA000400 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB000020 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA000200 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB000001 /* QRBookApp.swift in Sources */,
+				BB000002 /* QRCode.swift in Sources */,
+				BB000003 /* QRGenerator.swift in Sources */,
+				BB000004 /* QRDataEncoder.swift in Sources */,
+				BB000005 /* Validation.swift in Sources */,
+				BB000006 /* MainTabView.swift in Sources */,
+				BB000007 /* QRLibraryView.swift in Sources */,
+				BB000008 /* QRCardView.swift in Sources */,
+				BB000009 /* QRFilterSheet.swift in Sources */,
+				BB000010 /* CreateQRView.swift in Sources */,
+				BB000011 /* WiFiFormView.swift in Sources */,
+				BB000012 /* ContactFormView.swift in Sources */,
+				BB000013 /* CalendarFormView.swift in Sources */,
+				BB000014 /* PaymentFormView.swift in Sources */,
+				BB000015 /* QRFullscreenView.swift in Sources */,
+				BB000016 /* SettingsView.swift in Sources */,
+				BB000017 /* QRLibraryViewModel.swift in Sources */,
+				BB000018 /* QRCreationViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		AA000501 /* Debug */ = {
@@ -134,7 +281,7 @@
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -164,7 +311,7 @@
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
