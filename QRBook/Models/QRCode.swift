@@ -109,6 +109,10 @@ final class QRCode {
     var createdAt: Date = Date()
     var updatedAt: Date = Date()
     var lastUsed: Date?
+    var folderName: String = ""
+    var foregroundHex: String = ""
+    var backgroundHex: String = ""
+    var logoImageData: Data?
 
     // MARK: Computed Properties
 
@@ -150,7 +154,11 @@ final class QRCode {
         brightnessBoostDefault: Bool = false,
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
-        lastUsed: Date? = nil
+        lastUsed: Date? = nil,
+        folderName: String = "",
+        foregroundHex: String = "",
+        backgroundHex: String = "",
+        logoImageData: Data? = nil
     ) {
         self.id = id
         self.title = title
@@ -167,5 +175,9 @@ final class QRCode {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.lastUsed = lastUsed
+        self.folderName = folderName
+        self.foregroundHex = foregroundHex
+        self.backgroundHex = backgroundHex
+        self.logoImageData = logoImageData
     }
 }
