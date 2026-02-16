@@ -45,6 +45,14 @@ struct SettingsView: View {
                     .tint(Color.electricViolet)
             }
 
+            Section("Appearance") {
+                NavigationLink {
+                    AppearanceSettingsView()
+                } label: {
+                    Label("Accent Color & Theme", systemImage: "paintpalette")
+                }
+            }
+
             // Data
             Section("Data") {
                 NavigationLink {

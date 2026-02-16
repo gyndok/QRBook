@@ -32,6 +32,7 @@
 		BB000050 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000050 /* SplashView.swift */; };
 		BB000051 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000051 /* Folder.swift */; };
 		BB000052 /* ScanEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000052 /* ScanEvent.swift */; };
+		BB000053 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000053 /* AppearanceSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		CC000050 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		CC000051 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		CC000052 /* ScanEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEvent.swift; sourceTree = "<group>"; };
+		CC000053 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 			children = (
 				CC000016 /* SettingsView.swift */,
 				CC000031 /* BulkImportView.swift */,
+				CC000053 /* AppearanceSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				BB000050 /* SplashView.swift in Sources */,
 				BB000051 /* Folder.swift in Sources */,
 				BB000052 /* ScanEvent.swift in Sources */,
+				BB000053 /* AppearanceSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

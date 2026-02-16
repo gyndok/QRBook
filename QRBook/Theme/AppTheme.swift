@@ -24,9 +24,54 @@ extension Color {
         })
     }
 
+    enum AccentTheme: String, CaseIterable, Identifiable {
+        case violet = "7C3AED"
+        case indigo = "4F46E5"
+        case teal = "14B8A6"
+        case rose = "F43F5E"
+        case orange = "F97316"
+        case mono = "6B7280"
+
+        var id: String { rawValue }
+
+        var label: String {
+            switch self {
+            case .violet: return "Violet"
+            case .indigo: return "Indigo"
+            case .teal: return "Teal"
+            case .rose: return "Rose"
+            case .orange: return "Orange"
+            case .mono: return "Mono"
+            }
+        }
+
+        var color: Color { Color(hex: rawValue) }
+
+        var companionHex: String {
+            switch self {
+            case .violet: return "4F46E5"
+            case .indigo: return "6366F1"
+            case .teal: return "0D9488"
+            case .rose: return "E11D48"
+            case .orange: return "EA580C"
+            case .mono: return "4B5563"
+            }
+        }
+
+        var companionColor: Color { Color(hex: companionHex) }
+    }
+
     // Semantic colors
-    static let electricViolet = Color(hex: "7C3AED")
-    static let deepIndigo = Color(hex: "4F46E5")
+    static var electricViolet: Color {
+        let hex = UserDefaults.standard.string(forKey: "accentColorHex") ?? "7C3AED"
+        return Color(hex: hex)
+    }
+
+    static var deepIndigo: Color {
+        let hex = UserDefaults.standard.string(forKey: "accentColorHex") ?? "7C3AED"
+        let theme = AccentTheme(rawValue: hex) ?? .violet
+        return theme.companionColor
+    }
 
     static let appBg = Color(light: Color(hex: "F8F7FF"), dark: Color(hex: "0F0D1A"))
     static let cardBg = Color(light: .white, dark: Color(hex: "1A1730"))

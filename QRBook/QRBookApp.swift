@@ -4,12 +4,21 @@ import SwiftData
 @main
 struct QRBookApp: App {
     @State private var showSplash = true
+    @AppStorage("appearanceMode") private var appearanceMode = "dark"
+
+    private var colorScheme: ColorScheme? {
+        switch appearanceMode {
+        case "light": return .light
+        case "dark": return .dark
+        default: return nil
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
             ZStack {
                 MainTabView()
-                    .preferredColorScheme(.dark)
+                    .preferredColorScheme(colorScheme)
                     .tint(Color.electricViolet)
 
                 if showSplash {
