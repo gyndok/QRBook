@@ -14,6 +14,7 @@ struct QRLibraryView: View {
     @State private var selectedQR: QRCode?
     @State private var showDeleteConfirm = false
     @Environment(\.modelContext) private var modelContext
+    @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
     private var displayedCodes: [QRCode] {
         viewModel.filteredAndSorted(qrCodes, viewMode: viewMode)
     }
@@ -76,7 +77,14 @@ struct QRLibraryView: View {
             }
             .searchable(text: $viewModel.searchText, prompt: "Search QR codes...")
             .sheet(isPresented: $viewModel.showCreateSheet) {
-                CreateQRView()
+                CreateQRView(
+                    prefillData: viewModel.pendingShareData,
+                    prefillType: viewModel.pendingShareType == "url" ? .url : nil
+                )
+                .onDisappear {
+                    viewModel.pendingShareData = nil
+                    viewModel.pendingShareType = nil
+                }
             }
             .sheet(isPresented: $viewModel.showFilterSheet) {
                 QRFilterSheet(viewModel: viewModel, allTags: viewModel.allTags(from: qrCodes))
@@ -86,6 +94,30 @@ struct QRLibraryView: View {
                     qrCode: qr,
                     allQRCodes: displayedCodes
                 )
+            }
+            .onChange(of: router?.showQRCodeId) { _, id in
+                if let id, let qr = qrCodes.first(where: { $0.id == id }) {
+                    selectedQR = qr
+                    router?.showQRCodeId = nil
+                }
+            }
+            .onChange(of: router?.showCreateSheet) { _, show in
+                if show == true {
+                    if let data = router?.pendingShareData {
+                        let type = router?.pendingShareType
+                        viewModel.showCreateSheet = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            viewModel.pendingShareData = data
+                            viewModel.pendingShareType = type
+                            viewModel.showCreateSheet = true
+                        }
+                        router?.pendingShareData = nil
+                        router?.pendingShareType = nil
+                    } else {
+                        viewModel.showCreateSheet = true
+                    }
+                    router?.showCreateSheet = false
+                }
             }
         }
     }
@@ -273,6 +305,7 @@ struct QRLibraryView: View {
         for qr in qrCodes where viewModel.selectedIds.contains(qr.id) {
             modelContext.delete(qr)
         }
+        DataSyncManager.syncFavorites(context: modelContext)
         viewModel.exitSelectMode()
         HapticManager.success()
     }

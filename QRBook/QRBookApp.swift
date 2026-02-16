@@ -92,8 +92,7 @@ struct QRBookApp: App {
                let payload = try? JSONSerialization.jsonObject(with: data) as? [String: String],
                let qrData = payload["data"],
                let typeStr = payload["type"] {
-                UserDefaults.standard.set(qrData, forKey: "pendingShareData")
-                UserDefaults.standard.set(typeStr, forKey: "pendingShareType")
+                router.handlePendingShare(data: qrData, type: typeStr)
                 try? fm.removeItem(at: file)
             }
         }

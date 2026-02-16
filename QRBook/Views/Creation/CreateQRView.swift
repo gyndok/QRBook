@@ -221,6 +221,7 @@ struct CreateQRView: View {
         modelContext.insert(qrCode)
         SpotlightIndexer.indexQRCode(qrCode)
         try? modelContext.save()
+        DataSyncManager.syncFavorites(context: modelContext)
         HapticManager.success()
         dismiss()
     }

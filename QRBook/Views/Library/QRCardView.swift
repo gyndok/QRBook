@@ -27,6 +27,7 @@ struct QRCardView: View {
                             qrCode.isFavorite.toggle()
                             HapticManager.impact(.light)
                             qrCode.updatedAt = .now
+                            DataSyncManager.syncFavorites(context: modelContext)
                         }
                     } label: {
                         Image(systemName: qrCode.isFavorite ? "star.fill" : "star")
@@ -134,6 +135,7 @@ struct QRCardView: View {
                     logoImageData: qrCode.logoImageData
                 )
                 modelContext.insert(copy)
+                DataSyncManager.syncFavorites(context: modelContext)
                 HapticManager.success()
             } label: { Label("Duplicate", systemImage: "plus.square.on.square") }
             Button { UIPasteboard.general.string = qrCode.data } label: { Label("Copy Data", systemImage: "doc.on.doc") }
@@ -158,6 +160,7 @@ struct QRCardView: View {
             Button(role: .destructive) {
                 SpotlightIndexer.removeQRCode(id: qrCode.id)
                 modelContext.delete(qrCode)
+                DataSyncManager.syncFavorites(context: modelContext)
             } label: { Label("Delete", systemImage: "trash") }
         }
         .sheet(isPresented: $showEditSheet) {

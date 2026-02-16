@@ -55,6 +55,7 @@
 		BB000081 /* FavoritesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000081 /* FavoritesListView.swift */; };
 		BB000082 /* WatchQRFullscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000082 /* WatchQRFullscreenView.swift */; };
 		BB000083 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC000083 /* Assets.xcassets */; };
+		BB000084 /* DataSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000084 /* DataSyncManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,7 @@
 		CC000081 /* FavoritesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListView.swift; sourceTree = "<group>"; };
 		CC000082 /* WatchQRFullscreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQRFullscreenView.swift; sourceTree = "<group>"; };
 		CC000083 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC000084 /* DataSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				CC000063 /* SpotlightIndexer.swift */,
 				CC000068 /* WidgetDataWriter.swift */,
 				CC000077 /* WatchConnector.swift */,
+				CC000084 /* DataSyncManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -592,6 +595,7 @@
 				BB000075 /* FlyerEditorView.swift in Sources */,
 				BB000076 /* FlyerGalleryView.swift in Sources */,
 				BB000077 /* WatchConnector.swift in Sources */,
+				BB000084 /* DataSyncManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

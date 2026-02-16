@@ -200,6 +200,7 @@ struct EditQRView: View {
         qrCode.updatedAt = .now
         SpotlightIndexer.indexQRCode(qrCode)
         try? modelContext.save()
+        DataSyncManager.syncFavorites(context: modelContext)
         HapticManager.success()
         dismiss()
     }

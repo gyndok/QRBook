@@ -19,6 +19,8 @@ class QRLibraryViewModel {
     var showFilterSheet = false
     var showCreateSheet = false
     var filterFolder: String? = nil
+    var pendingShareData: String?
+    var pendingShareType: String?
 
     var isSelectMode = false
     var selectedIds: Set<UUID> = []
