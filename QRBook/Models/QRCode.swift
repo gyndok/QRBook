@@ -92,22 +92,22 @@ enum ErrorCorrectionLevel: String, CaseIterable, Identifiable, Codable {
 @Model
 final class QRCode {
 
-    // MARK: Stored Properties
+    // MARK: Stored Properties (all have defaults for CloudKit compatibility)
 
-    var id: UUID
-    var title: String
-    var data: String
-    var typeRaw: String
-    var tagsRaw: String
-    var isFavorite: Bool
-    var errorCorrectionRaw: String
-    var sizePx: Int
-    var oneTimeUse: Bool
+    var id: UUID = UUID()
+    var title: String = ""
+    var data: String = ""
+    var typeRaw: String = QRType.url.rawValue
+    var tagsRaw: String = ""
+    var isFavorite: Bool = false
+    var errorCorrectionRaw: String = ErrorCorrectionLevel.M.rawValue
+    var sizePx: Int = 512
+    var oneTimeUse: Bool = false
     var expiresAt: Date?
-    var scanCount: Int
-    var brightnessBoostDefault: Bool
-    var createdAt: Date
-    var updatedAt: Date
+    var scanCount: Int = 0
+    var brightnessBoostDefault: Bool = false
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
     var lastUsed: Date?
 
     // MARK: Computed Properties

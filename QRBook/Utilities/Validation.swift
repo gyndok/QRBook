@@ -12,10 +12,20 @@ struct Validation {
         let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty { return "URL is required" }
         if trimmed.count > 2048 { return "URL must be less than 2048 characters" }
-        guard URL(string: trimmed) != nil, trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") else {
+        let normalized = normalizeURL(trimmed)
+        guard URL(string: normalized) != nil else {
             return "Please enter a valid URL"
         }
         return nil
+    }
+
+    /// Adds https:// if no scheme is present.
+    static func normalizeURL(_ url: String) -> String {
+        let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
+            return trimmed
+        }
+        return "https://\(trimmed)"
     }
 
     static func validateText(_ text: String) -> String? {

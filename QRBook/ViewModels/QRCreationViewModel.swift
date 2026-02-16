@@ -66,6 +66,7 @@ class QRCreationViewModel {
 
     func generateQRData() -> String {
         switch selectedType {
+        case .url, .file: return Validation.normalizeURL(data)
         case .wifi: return QRDataEncoder.encodeWiFi(wifiData)
         case .contact: return QRDataEncoder.encodeContact(contactData)
         case .calendar: return QRDataEncoder.encodeCalendarEvent(calendarData)
