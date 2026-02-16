@@ -45,6 +45,8 @@
 		BB000065 /* CreateQRCodeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000065 /* CreateQRCodeIntent.swift */; };
 		BB000066 /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000066 /* AppShortcuts.swift */; };
 		BB000067 /* QRHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000067 /* QRHistoryView.swift */; };
+		BB000068 /* WidgetDataWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000068 /* WidgetDataWriter.swift */; };
+		BB000070 /* QRBookWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000070 /* QRBookWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +93,10 @@
 		CC000065 /* CreateQRCodeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRCodeIntent.swift; sourceTree = "<group>"; };
 		CC000066 /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
 		CC000067 /* QRHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRHistoryView.swift; sourceTree = "<group>"; };
+		CC000068 /* WidgetDataWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataWriter.swift; sourceTree = "<group>"; };
+		AA000003 /* QRBookWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QRBookWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC000070 /* QRBookWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRBookWidget.swift; sourceTree = "<group>"; };
+		CC000071 /* QRBookWidgetBundle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QRBookWidgetBundle.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +114,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA000302 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -116,6 +129,7 @@
 			children = (
 				AA000020 /* QRBook */,
 				DD000013 /* QRBookShareExtension */,
+				DD000015 /* QRBookWidget */,
 				AA000030 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -141,6 +155,7 @@
 			children = (
 				AA000001 /* QRBook.app */,
 				AA000002 /* QRBookShareExtension.appex */,
+				AA000003 /* QRBookWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +205,7 @@
 				CC000055 /* HapticManager.swift */,
 				CC000056 /* QRDataDecoder.swift */,
 				CC000063 /* SpotlightIndexer.swift */,
+				CC000068 /* WidgetDataWriter.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -288,6 +304,15 @@
 			path = Intents;
 			sourceTree = "<group>";
 		};
+		DD000015 /* QRBookWidget */ = {
+			isa = PBXGroup;
+			children = (
+				CC000070 /* QRBookWidget.swift */,
+				CC000071 /* QRBookWidgetBundle.entitlements */,
+			);
+			path = QRBookWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXContainerItemProxy section */
@@ -298,6 +323,13 @@
 			remoteGlobalIDString = AA000101;
 			remoteInfo = QRBookShareExtension;
 		};
+		AA000803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA000011 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA000102;
+			remoteInfo = QRBookWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXTargetDependency section */
@@ -305,6 +337,11 @@
 			isa = PBXTargetDependency;
 			target = AA000101 /* QRBookShareExtension */;
 			targetProxy = AA000801 /* PBXContainerItemProxy */;
+		};
+		AA000804 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA000102 /* QRBookWidgetExtension */;
+			targetProxy = AA000803 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -322,6 +359,7 @@
 			);
 			dependencies = (
 				AA000802 /* PBXTargetDependency */,
+				AA000804 /* PBXTargetDependency */,
 			);
 			name = QRBook;
 			packageProductDependencies = (
@@ -347,6 +385,23 @@
 			productReference = AA000002 /* QRBookShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		AA000102 /* QRBookWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA000710 /* Build configuration list for PBXNativeTarget "QRBookWidgetExtension" */;
+			buildPhases = (
+				AA000202 /* Sources */,
+				AA000302 /* Frameworks */,
+				AA000402 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QRBookWidgetExtension;
+			productName = QRBookWidgetExtension;
+			productReference = AA000003 /* QRBookWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -361,6 +416,9 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					AA000101 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					AA000102 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
@@ -380,6 +438,7 @@
 			targets = (
 				AA000100 /* QRBook */,
 				AA000101 /* QRBookShareExtension */,
+				AA000102 /* QRBookWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -394,6 +453,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA000401 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000402 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -443,6 +509,7 @@
 				BB000065 /* CreateQRCodeIntent.swift in Sources */,
 				BB000066 /* AppShortcuts.swift in Sources */,
 				BB000067 /* QRHistoryView.swift in Sources */,
+				BB000068 /* WidgetDataWriter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +518,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB000060 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000202 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB000070 /* QRBookWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +784,58 @@
 			};
 			name = Release;
 		};
+		AA000711 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = QRBookWidget/QRBookWidgetBundle.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = QRBookWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA000712 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = QRBookWidget/QRBookWidgetBundle.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ4JGW72MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = QRBookWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -735,6 +862,15 @@
 			buildConfigurations = (
 				AA000701 /* Debug */,
 				AA000702 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA000710 /* Build configuration list for PBXNativeTarget "QRBookWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA000711 /* Debug */,
+				AA000712 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
