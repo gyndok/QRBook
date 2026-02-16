@@ -198,6 +198,7 @@ struct EditQRView: View {
         qrCode.backgroundHex = viewModel.backgroundHex
         qrCode.logoImageData = viewModel.logoImageData
         qrCode.updatedAt = .now
+        SpotlightIndexer.indexQRCode(qrCode)
         try? modelContext.save()
         HapticManager.success()
         dismiss()

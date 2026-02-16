@@ -156,6 +156,7 @@ struct QRCardView: View {
             }
             Divider()
             Button(role: .destructive) {
+                SpotlightIndexer.removeQRCode(id: qrCode.id)
                 modelContext.delete(qrCode)
             } label: { Label("Delete", systemImage: "trash") }
         }

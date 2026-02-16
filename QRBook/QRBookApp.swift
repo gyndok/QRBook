@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import UIKit
+import CoreSpotlight
 
 @main
 struct QRBookApp: App {
@@ -43,6 +44,12 @@ struct QRBookApp: App {
                 if let action {
                     router.handleQuickAction(action)
                     appDelegate.shortcutAction = nil
+                }
+            }
+            .onContinueUserActivity(CSSearchableItemActionType) { activity in
+                if let id = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+                   let uuid = UUID(uuidString: id) {
+                    router.showQRCode(id: uuid)
                 }
             }
         }
