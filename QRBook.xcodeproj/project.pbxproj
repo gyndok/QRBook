@@ -39,6 +39,7 @@
 		BB000057 /* EditQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000057 /* EditQRView.swift */; };
 		BB000058 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000058 /* ScannerView.swift */; };
 		BB000060 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000060 /* ShareViewController.swift */; };
+		BB000059 /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000059 /* DeepLinkRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		CC000060 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		CC000061 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC000062 /* QRBookShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QRBookShareExtension.entitlements; sourceTree = "<group>"; };
+		CC000059 /* DeepLinkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 			children = (
 				CC000017 /* QRLibraryViewModel.swift */,
 				CC000018 /* QRCreationViewModel.swift */,
+				CC000059 /* DeepLinkRouter.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				BB000056 /* QRDataDecoder.swift in Sources */,
 				BB000057 /* EditQRView.swift in Sources */,
 				BB000058 /* ScannerView.swift in Sources */,
+				BB000059 /* DeepLinkRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

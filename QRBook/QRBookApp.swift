@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct QRBookApp: App {
     @State private var showSplash = true
+    @State private var router = DeepLinkRouter()
     @AppStorage("appearanceMode") private var appearanceMode = "dark"
 
     private var colorScheme: ColorScheme? {
@@ -18,6 +19,7 @@ struct QRBookApp: App {
         WindowGroup {
             ZStack {
                 MainTabView()
+                    .environment(router)
                     .preferredColorScheme(colorScheme)
                     .tint(Color.electricViolet)
 

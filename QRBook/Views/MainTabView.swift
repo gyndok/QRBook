@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 
 struct MainTabView: View {
+    @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
     @State private var selectedTab: Tab = .library
 
     enum Tab: String, CaseIterable {
@@ -71,6 +72,11 @@ struct MainTabView: View {
                     Label(tab.label, systemImage: tab.icon)
                 }
                 .tag(tab)
+            }
+        }
+        .onChange(of: router?.selectedTab) { _, newTab in
+            if let newTab {
+                selectedTab = newTab
             }
         }
     }
