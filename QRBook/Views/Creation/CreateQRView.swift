@@ -194,7 +194,7 @@ struct CreateQRView: View {
 
         modelContext.insert(qrCode)
         try? modelContext.save()
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        HapticManager.success()
         dismiss()
     }
 }

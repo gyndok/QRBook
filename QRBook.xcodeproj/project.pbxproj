@@ -34,6 +34,8 @@
 		BB000052 /* ScanEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000052 /* ScanEvent.swift */; };
 		BB000053 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000053 /* AppearanceSettingsView.swift */; };
 		BB000054 /* ManageFoldersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000054 /* ManageFoldersView.swift */; };
+		BB000055 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000055 /* HapticManager.swift */; };
+		BB000056 /* QRDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000056 /* QRDataDecoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +68,8 @@
 		CC000052 /* ScanEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEvent.swift; sourceTree = "<group>"; };
 		CC000053 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		CC000054 /* ManageFoldersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFoldersView.swift; sourceTree = "<group>"; };
+		CC000055 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		CC000056 /* QRDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRDataDecoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +154,8 @@
 				CC000004 /* QRDataEncoder.swift */,
 				CC000005 /* Validation.swift */,
 				CC000030 /* BulkImportService.swift */,
+				CC000055 /* HapticManager.swift */,
+				CC000056 /* QRDataDecoder.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -315,6 +321,8 @@
 				BB000052 /* ScanEvent.swift in Sources */,
 				BB000053 /* AppearanceSettingsView.swift in Sources */,
 				BB000054 /* ManageFoldersView.swift in Sources */,
+				BB000055 /* HapticManager.swift in Sources */,
+				BB000056 /* QRDataDecoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

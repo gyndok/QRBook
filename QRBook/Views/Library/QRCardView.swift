@@ -24,6 +24,7 @@ struct QRCardView: View {
                     Button {
                         withAnimation(.spring(response: 0.3)) {
                             qrCode.isFavorite.toggle()
+                            HapticManager.impact(.light)
                             qrCode.updatedAt = .now
                         }
                     } label: {

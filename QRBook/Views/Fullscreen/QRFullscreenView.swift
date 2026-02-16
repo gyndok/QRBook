@@ -102,11 +102,11 @@ struct QRFullscreenView: View {
                                         if value.translation.width < -threshold, currentIndex < allQRCodes.count - 1 {
                                             currentIndex += 1
                                             recordScan()
-                                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                            HapticManager.impact()
                                         } else if value.translation.width > threshold, currentIndex > 0 {
                                             currentIndex -= 1
                                             recordScan()
-                                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                            HapticManager.impact()
                                         }
                                         dragOffset = 0
                                     }
@@ -174,6 +174,6 @@ struct QRFullscreenView: View {
             logoImageData: currentQR.logoImageData
         ) else { return }
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        HapticManager.success()
     }
 }
