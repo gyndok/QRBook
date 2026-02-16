@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 @Observable
 class QRCreationViewModel {
@@ -13,6 +14,12 @@ class QRCreationViewModel {
     var oneTimeUse = false
     var brightnessBoostDefault = true
     var showAdvanced = false
+    var foregroundHex = ""
+    var backgroundHex = ""
+    var foregroundColor: Color = .black
+    var backgroundColor: Color = .white
+    var logoImageData: Data?
+    var folderName = ""
 
     // Type-specific data
     var wifiData = WiFiData(ssid: "", password: "", security: .WPA)
@@ -88,5 +95,19 @@ class QRCreationViewModel {
 
     func removeTag(_ tag: String) {
         tags.removeAll { $0 == tag }
+    }
+
+    func syncColors() {
+        let fgComponents = UIColor(foregroundColor).cgColor.components ?? [0, 0, 0]
+        foregroundHex = String(format: "%02X%02X%02X",
+            Int((fgComponents.count > 0 ? fgComponents[0] : 0) * 255),
+            Int((fgComponents.count > 1 ? fgComponents[1] : 0) * 255),
+            Int((fgComponents.count > 2 ? fgComponents[2] : 0) * 255))
+
+        let bgComponents = UIColor(backgroundColor).cgColor.components ?? [1, 1, 1]
+        backgroundHex = String(format: "%02X%02X%02X",
+            Int((bgComponents.count > 0 ? bgComponents[0] : 0) * 255),
+            Int((bgComponents.count > 1 ? bgComponents[1] : 0) * 255),
+            Int((bgComponents.count > 2 ? bgComponents[2] : 0) * 255))
     }
 }

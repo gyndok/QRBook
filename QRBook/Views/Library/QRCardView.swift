@@ -37,7 +37,10 @@ struct QRCardView: View {
                 if let uiImage = QRGenerator.generateQRCode(
                     from: qrCode.data,
                     correctionLevel: qrCode.errorCorrection,
-                    size: 120
+                    size: 120,
+                    foregroundHex: qrCode.foregroundHex,
+                    backgroundHex: qrCode.backgroundHex,
+                    logoImageData: qrCode.logoImageData
                 ) {
                     Image(uiImage: uiImage)
                         .interpolation(.none)

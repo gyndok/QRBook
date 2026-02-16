@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct CreateQRView: View {
     @Environment(\.dismiss) private var dismiss
@@ -83,6 +84,10 @@ struct CreateQRView: View {
 
                         Toggle("Add to Favorites", isOn: $viewModel.isFavorite)
                         Toggle("Brightness Boost", isOn: $viewModel.brightnessBoostDefault)
+                        ColorPicker("QR Foreground", selection: $viewModel.foregroundColor, supportsOpacity: false)
+                            .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
+                        ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
+                            .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
                     }
                 }
 
@@ -167,7 +172,11 @@ struct CreateQRView: View {
             errorCorrection: viewModel.errorCorrection,
             sizePx: viewModel.sizePx,
             oneTimeUse: viewModel.oneTimeUse,
-            brightnessBoostDefault: viewModel.brightnessBoostDefault
+            brightnessBoostDefault: viewModel.brightnessBoostDefault,
+            folderName: viewModel.folderName,
+            foregroundHex: viewModel.foregroundHex,
+            backgroundHex: viewModel.backgroundHex,
+            logoImageData: viewModel.logoImageData
         )
 
         modelContext.insert(qrCode)

@@ -75,7 +75,10 @@ struct QRFullscreenView: View {
                 if let uiImage = QRGenerator.generateQRCode(
                     from: currentQR.data,
                     correctionLevel: currentQR.errorCorrection,
-                    size: 320
+                    size: 320,
+                    foregroundHex: currentQR.foregroundHex,
+                    backgroundHex: currentQR.backgroundHex,
+                    logoImageData: currentQR.logoImageData
                 ) {
                     Image(uiImage: uiImage)
                         .interpolation(.none)
@@ -165,7 +168,10 @@ struct QRFullscreenView: View {
         guard let image = QRGenerator.generateQRCode(
             from: currentQR.data,
             correctionLevel: currentQR.errorCorrection,
-            size: CGFloat(currentQR.sizePx)
+            size: CGFloat(currentQR.sizePx),
+            foregroundHex: currentQR.foregroundHex,
+            backgroundHex: currentQR.backgroundHex,
+            logoImageData: currentQR.logoImageData
         ) else { return }
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
