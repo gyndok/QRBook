@@ -65,7 +65,7 @@ struct MainTabView: View {
                     case .recent:
                         QRLibraryView(viewMode: .recent)
                     case .flyers:
-                        FlyersPlaceholderView()
+                        FlyerGalleryView()
                     }
                 }
                 .tabItem {
@@ -82,19 +82,6 @@ struct MainTabView: View {
     }
 }
 
-struct FlyersPlaceholderView: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Coming Soon",
-                systemImage: "doc.text",
-                description: Text("Flyer creation will be available in a future update.")
-            )
-            .navigationTitle("Flyers")
-        }
-        .tint(Color.electricViolet)
-    }
-}
 
 #Preview {
     MainTabView()

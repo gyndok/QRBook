@@ -47,6 +47,9 @@
 		BB000067 /* QRHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000067 /* QRHistoryView.swift */; };
 		BB000068 /* WidgetDataWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000068 /* WidgetDataWriter.swift */; };
 		BB000070 /* QRBookWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000070 /* QRBookWidget.swift */; };
+		BB000074 /* FlyerTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000074 /* FlyerTemplates.swift */; };
+		BB000075 /* FlyerEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000075 /* FlyerEditorView.swift */; };
+		BB000076 /* FlyerGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000076 /* FlyerGalleryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +100,9 @@
 		AA000003 /* QRBookWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QRBookWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC000070 /* QRBookWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRBookWidget.swift; sourceTree = "<group>"; };
 		CC000071 /* QRBookWidgetBundle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QRBookWidgetBundle.entitlements; sourceTree = "<group>"; };
+		CC000074 /* FlyerTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerTemplates.swift; sourceTree = "<group>"; };
+		CC000075 /* FlyerEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerEditorView.swift; sourceTree = "<group>"; };
+		CC000076 /* FlyerGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyerGalleryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +197,7 @@
 				DD000009 /* Settings */,
 				DD000011 /* Folders */,
 				DD000012 /* Scanner */,
+				DD000016 /* Flyers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -274,6 +281,16 @@
 				CC000058 /* ScannerView.swift */,
 			);
 			path = Scanner;
+			sourceTree = "<group>";
+		};
+		DD000016 /* Flyers */ = {
+			isa = PBXGroup;
+			children = (
+				CC000074 /* FlyerTemplates.swift */,
+				CC000075 /* FlyerEditorView.swift */,
+				CC000076 /* FlyerGalleryView.swift */,
+			);
+			path = Flyers;
 			sourceTree = "<group>";
 		};
 		DD000010 /* Theme */ = {
@@ -510,6 +527,9 @@
 				BB000066 /* AppShortcuts.swift in Sources */,
 				BB000067 /* QRHistoryView.swift in Sources */,
 				BB000068 /* WidgetDataWriter.swift in Sources */,
+				BB000074 /* FlyerTemplates.swift in Sources */,
+				BB000075 /* FlyerEditorView.swift in Sources */,
+				BB000076 /* FlyerGalleryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
