@@ -30,7 +30,7 @@ struct SplashView: View {
                     .scaleEffect(iconScale)
                     .opacity(iconOpacity)
 
-                Text("QR Book")
+                Text("QR Snap Vault")
                     .font(.screenTitle)
                     .foregroundStyle(Color.electricViolet)
                     .opacity(textOpacity)
