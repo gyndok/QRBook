@@ -794,6 +794,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Snap Vault uses the camera to scan QR codes.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Snap Vault needs access to save QR code images to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -826,6 +827,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Snap Vault uses the camera to scan QR codes.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "QR Snap Vault needs access to save QR code images to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
