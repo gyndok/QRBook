@@ -4,11 +4,33 @@ import SwiftData
 struct ManageFoldersView: View {
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreManager.self) private var storeManager
     @State private var newFolderName = ""
+    @State private var showPaywall = false
 
     var body: some View {
         List {
-            Section("Create Folder") {
+            Section {
+                HStack {
+                    Text("Create Folder")
+                        .font(.headline)
+                    Spacer()
+                    if !storeManager.isProUnlocked {
+                        Text("PRO")
+                            .font(.caption2)
+                            .fontWeight(.bold)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.electricViolet)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                }
+            } header: {
+                EmptyView()
+            }
+
+            Section {
                 HStack {
                     TextField("Folder name...", text: $newFolderName)
                     Button {
@@ -42,9 +64,14 @@ struct ManageFoldersView: View {
             }
         }
         .navigationTitle("Manage Folders")
+        .sheet(isPresented: $showPaywall) { PaywallView() }
     }
 
     private func createFolder() {
+        guard storeManager.isProUnlocked else {
+            showPaywall = true
+            return
+        }
         let name = newFolderName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { return }
         guard !folders.contains(where: { $0.name == name }) else { return }

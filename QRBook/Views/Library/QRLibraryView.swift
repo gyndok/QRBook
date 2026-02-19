@@ -13,8 +13,10 @@ struct QRLibraryView: View {
     @State private var viewModel = QRLibraryViewModel()
     @State private var selectedQR: QRCode?
     @State private var showDeleteConfirm = false
+    @State private var showPaywall = false
     @Environment(\.modelContext) private var modelContext
     @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
+    @Environment(StoreManager.self) private var storeManager
     private var displayedCodes: [QRCode] {
         viewModel.filteredAndSorted(qrCodes, viewMode: viewMode)
     }
@@ -46,10 +48,18 @@ struct QRLibraryView: View {
                         Button("Done") { viewModel.exitSelectMode() }
                     } else {
                         HStack(spacing: 16) {
-                            Button { viewModel.isSelectMode = true } label: {
-                                Image(systemName: "checkmark.circle")
+                            if storeManager.isProUnlocked {
+                                Button { viewModel.isSelectMode = true } label: {
+                                    Image(systemName: "checkmark.circle")
+                                }
                             }
-                            Button { viewModel.showCreateSheet = true } label: {
+                            Button {
+                                if qrCodes.count >= StoreManager.freeCodeLimit && !storeManager.isProUnlocked {
+                                    showPaywall = true
+                                } else {
+                                    viewModel.showCreateSheet = true
+                                }
+                            } label: {
                                 Image(systemName: "plus")
                             }
                         }
@@ -89,6 +99,7 @@ struct QRLibraryView: View {
             .sheet(isPresented: $viewModel.showFilterSheet) {
                 QRFilterSheet(viewModel: viewModel, allTags: viewModel.allTags(from: qrCodes))
             }
+            .sheet(isPresented: $showPaywall) { PaywallView() }
             .fullScreenCover(item: $selectedQR) { qr in
                 QRFullscreenView(
                     qrCode: qr,
@@ -170,9 +181,15 @@ struct QRLibraryView: View {
 
                     Spacer()
 
-                    Text("\(displayedCodes.count) of \(qrCodes.count)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    if storeManager.isProUnlocked {
+                        Text("\(displayedCodes.count) of \(qrCodes.count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("\(qrCodes.count) of \(StoreManager.freeCodeLimit)")
+                            .font(.caption)
+                            .foregroundStyle(qrCodes.count >= StoreManager.freeCodeLimit ? Color.electricViolet : .secondary)
+                    }
 
                     Spacer()
 

@@ -1,0 +1,85 @@
+{
+  "identifier" : "8A7B5C3D-1E2F-4A6B-9C0D-3E4F5A6B7C8D",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "6.99",
+      "familyShareable" : true,
+      "internalID" : "F1E2D3C4-B5A6-4798-8C9D-0E1F2A3B4C5D",
+      "localizations" : [
+        {
+          "description" : "Unlock all QR types, unlimited codes, custom colors, folders, flyers, and bulk import.",
+          "displayName" : "QR Snap Vault PRO",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.gyndok.qrbook.pro",
+      "referenceName" : "QR Snap Vault PRO",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6741289538",
+    "_developerTeamID" : "5VF3HX79Y4",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 729216000,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

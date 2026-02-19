@@ -8,6 +8,7 @@ struct QRBookApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var showSplash = true
     @State private var router = DeepLinkRouter()
+    @State private var storeManager = StoreManager()
     @AppStorage("appearanceMode") private var appearanceMode = "dark"
 
     private var colorScheme: ColorScheme? {
@@ -23,6 +24,7 @@ struct QRBookApp: App {
             ZStack {
                 MainTabView()
                     .environment(router)
+                    .environment(storeManager)
                     .preferredColorScheme(colorScheme)
                     .tint(Color.electricViolet)
 
@@ -34,6 +36,7 @@ struct QRBookApp: App {
             .onAppear {
                 checkPendingShareImports()
                 setupQuickActions()
+                Task { await storeManager.checkEntitlement() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                     withAnimation(.easeOut(duration: 0.4)) {
                         showSplash = false

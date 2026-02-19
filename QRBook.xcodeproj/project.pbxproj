@@ -56,6 +56,8 @@
 		BB000082 /* WatchQRFullscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000082 /* WatchQRFullscreenView.swift */; };
 		BB000083 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC000083 /* Assets.xcassets */; };
 		BB000084 /* DataSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000084 /* DataSyncManager.swift */; };
+		BB000100 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000100 /* StoreManager.swift */; };
+		BB000101 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000101 /* PaywallView.swift */; };
 		BB000090 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000090 /* TestHelpers.swift */; };
 		BB000091 /* ValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000091 /* ValidationTests.swift */; };
 		BB000092 /* QRDataEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000092 /* QRDataEncoderTests.swift */; };
@@ -163,6 +165,9 @@
 		CC000082 /* WatchQRFullscreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQRFullscreenView.swift; sourceTree = "<group>"; };
 		CC000083 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC000084 /* DataSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncManager.swift; sourceTree = "<group>"; };
+		CC000100 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		CC000101 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		CC000102 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		CC000090 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		CC000091 /* ValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationTests.swift; sourceTree = "<group>"; };
 		CC000092 /* QRDataEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRDataEncoderTests.swift; sourceTree = "<group>"; };
@@ -236,6 +241,7 @@
 				DD000003 /* Views */,
 				DD000004 /* Utilities */,
 				DD000014 /* Intents */,
+				DD000030 /* Store */,
 				DD000005 /* Resources */,
 			);
 			path = QRBook;
@@ -428,6 +434,16 @@
 				CC000083 /* Assets.xcassets */,
 			);
 			path = "QRBookWatch Watch App";
+			sourceTree = "<group>";
+		};
+		DD000030 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				CC000100 /* StoreManager.swift */,
+				CC000101 /* PaywallView.swift */,
+				CC000102 /* StoreKit.storekit */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		DD000020 /* QRBookTests */ = {
@@ -717,6 +733,8 @@
 				BB000076 /* FlyerGalleryView.swift in Sources */,
 				BB000077 /* WatchConnector.swift in Sources */,
 				BB000084 /* DataSyncManager.swift in Sources */,
+				BB000100 /* StoreManager.swift in Sources */,
+				BB000101 /* PaywallView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

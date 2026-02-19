@@ -4,7 +4,9 @@ import UniformTypeIdentifiers
 
 struct BulkImportView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreManager.self) private var storeManager
 
+    @State private var showPaywall = false
     @State private var importResult: BulkImportResult?
     @State private var showingSuccessAlert = false
     @State private var showingErrorSheet = false
@@ -15,6 +17,23 @@ struct BulkImportView: View {
 
     var body: some View {
         List {
+            if !storeManager.isProUnlocked {
+                Section {
+                    HStack {
+                        Image(systemName: "lock.fill")
+                            .foregroundStyle(Color.electricViolet)
+                        Text("Bulk Import is a PRO feature")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Spacer()
+                        Button("Unlock") { showPaywall = true }
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.electricViolet)
+                    }
+                }
+            }
+
             Section {
                 Text("Create many QR codes at once. Export the template, fill it in (or give it to an AI like ChatGPT/Claude), then import the completed JSON.")
                     .font(.subheadline)
@@ -50,12 +69,14 @@ struct BulkImportView: View {
 
             Section("Step 2: Import Filled Template") {
                 Button {
+                    guard storeManager.isProUnlocked else { showPaywall = true; return }
                     pasteFromClipboard()
                 } label: {
                     Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
                 }
 
                 Button {
+                    guard storeManager.isProUnlocked else { showPaywall = true; return }
                     showingFileImporter = true
                 } label: {
                     Label("Import from File", systemImage: "folder")
@@ -95,6 +116,7 @@ struct BulkImportView: View {
         } message: {
             Text(parseErrorMessage)
         }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
         .sheet(isPresented: $showingErrorSheet) {
             errorDetailSheet
         }

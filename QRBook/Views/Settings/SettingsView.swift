@@ -10,6 +10,12 @@ struct SettingsView: View {
     @Query private var qrCodes: [QRCode]
     @Query private var scanEvents: [ScanEvent]
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreManager.self) private var storeManager
+
+    @State private var showPaywall = false
+    @State private var versionTapCount = 0
+    @State private var showDevUnlockAlert = false
+    @State private var devCode = ""
 
     var body: some View {
         List {
@@ -22,6 +28,43 @@ struct SettingsView: View {
                 LabeledContent("Favorites") {
                     Text("\(qrCodes.filter(\.isFavorite).count)")
                         .foregroundStyle(Color.electricViolet)
+                }
+            }
+
+            // PRO Section
+            Section("QR Snap Vault PRO") {
+                if storeManager.isProUnlocked {
+                    HStack {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(Color.electricViolet)
+                        if storeManager.devUnlock && !storeManager.hasStoreKitEntitlement {
+                            Text("PRO Unlocked (Developer)")
+                        } else {
+                            Text("PRO Unlocked")
+                        }
+                        Spacer()
+                    }
+                    .foregroundStyle(Color.electricViolet)
+                } else {
+                    HStack {
+                        Image(systemName: "star.circle")
+                            .foregroundStyle(.secondary)
+                        Text("Free")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button("Upgrade to PRO") {
+                            showPaywall = true
+                        }
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.electricViolet)
+                    }
+                }
+
+                Button {
+                    Task { await storeManager.restorePurchases() }
+                } label: {
+                    Label("Restore Purchases", systemImage: "arrow.clockwise")
                 }
             }
 
@@ -59,13 +102,39 @@ struct SettingsView: View {
                 NavigationLink {
                     ManageFoldersView()
                 } label: {
-                    Label("Manage Folders", systemImage: "folder")
+                    HStack {
+                        Label("Manage Folders", systemImage: "folder")
+                        if !storeManager.isProUnlocked {
+                            Spacer()
+                            Text("PRO")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.electricViolet)
+                                .foregroundStyle(.white)
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
 
                 NavigationLink {
                     BulkImportView()
                 } label: {
-                    Label("Bulk Import", systemImage: "square.and.arrow.down.on.square")
+                    HStack {
+                        Label("Bulk Import", systemImage: "square.and.arrow.down.on.square")
+                        if !storeManager.isProUnlocked {
+                            Spacer()
+                            Text("PRO")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.electricViolet)
+                                .foregroundStyle(.white)
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
 
                 Button {
@@ -86,10 +155,38 @@ struct SettingsView: View {
             // About
             Section("About") {
                 LabeledContent("Version", value: "1.0.0")
+                    #if DEBUG
+                    .onTapGesture {
+                        versionTapCount += 1
+                        if versionTapCount >= 3 {
+                            versionTapCount = 0
+                            if storeManager.devUnlock {
+                                storeManager.devUnlock = false
+                            } else {
+                                showDevUnlockAlert = true
+                            }
+                        }
+                    }
+                    #endif
                 LabeledContent("iCloud Sync", value: "Enabled")
             }
         }
         .navigationTitle("Settings")
+        .sheet(isPresented: $showPaywall) { PaywallView() }
+        #if DEBUG
+        .alert("Developer Unlock", isPresented: $showDevUnlockAlert) {
+            SecureField("Code", text: $devCode)
+            Button("Unlock") {
+                if devCode == "qrbook2026" {
+                    storeManager.devUnlock = true
+                }
+                devCode = ""
+            }
+            Button("Cancel", role: .cancel) { devCode = "" }
+        } message: {
+            Text("Enter developer code:")
+        }
+        #endif
     }
 
     private func clearHistory() {

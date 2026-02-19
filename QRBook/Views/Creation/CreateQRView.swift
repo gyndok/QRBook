@@ -5,9 +5,12 @@ import PhotosUI
 struct CreateQRView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreManager.self) private var storeManager
     @State private var viewModel = QRCreationViewModel()
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
+    @Query private var allQRCodes: [QRCode]
     @State private var isCreating = false
+    @State private var showPaywall = false
 
     var prefillData: String?
     var prefillType: QRType?
@@ -19,10 +22,18 @@ struct CreateQRView: View {
                 Section("QR Code Type") {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(QRType.allCases) { type in
-                            TypeCard(type: type, isSelected: viewModel.selectedType == type) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    viewModel.selectedType = type
-                                    viewModel.data = ""
+                            TypeCard(
+                                type: type,
+                                isSelected: viewModel.selectedType == type,
+                                isLocked: type.isPro && !storeManager.isProUnlocked
+                            ) {
+                                if type.isPro && !storeManager.isProUnlocked {
+                                    showPaywall = true
+                                } else {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        viewModel.selectedType = type
+                                        viewModel.data = ""
+                                    }
                                 }
                             }
                         }
@@ -100,10 +111,29 @@ struct CreateQRView: View {
 
                         Toggle("Add to Favorites", isOn: $viewModel.isFavorite)
                         Toggle("Brightness Boost", isOn: $viewModel.brightnessBoostDefault)
-                        ColorPicker("QR Foreground", selection: $viewModel.foregroundColor, supportsOpacity: false)
-                            .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
-                        ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
-                            .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                        if storeManager.isProUnlocked {
+                            ColorPicker("QR Foreground", selection: $viewModel.foregroundColor, supportsOpacity: false)
+                                .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
+                            ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
+                                .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                        } else {
+                            Button {
+                                showPaywall = true
+                            } label: {
+                                HStack {
+                                    Label("Custom Colors", systemImage: "paintbrush")
+                                    Spacer()
+                                    Text("PRO")
+                                        .font(.caption2)
+                                        .fontWeight(.semibold)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color.electricViolet)
+                                        .foregroundStyle(.white)
+                                        .clipShape(Capsule())
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -154,6 +184,7 @@ struct CreateQRView: View {
                 }
             }
         }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
         .presentationBackground(Color.cardBg)
     }
 
@@ -198,6 +229,10 @@ struct CreateQRView: View {
     }
 
     private func createQRCode() {
+        if allQRCodes.count >= StoreManager.freeCodeLimit && !storeManager.isProUnlocked {
+            showPaywall = true
+            return
+        }
         guard viewModel.validate() else { return }
         isCreating = true
 
@@ -230,6 +265,7 @@ struct CreateQRView: View {
 struct TypeCard: View {
     let type: QRType
     let isSelected: Bool
+    var isLocked: Bool = false
     let action: () -> Void
 
     var body: some View {
@@ -251,10 +287,18 @@ struct TypeCard: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
+
+                if isLocked {
+                    Spacer()
+                    Image(systemName: "lock.fill")
+                        .font(.caption2)
+                        .foregroundStyle(Color.electricViolet)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(8)
             .background(isSelected ? Color.electricViolet.opacity(0.08) : Color.clear)
+            .opacity(isLocked ? 0.6 : 1.0)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)

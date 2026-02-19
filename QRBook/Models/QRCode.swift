@@ -65,6 +65,13 @@ enum QRType: String, CaseIterable, Identifiable, Codable {
         case .calendar: return "Calendar event details"
         }
     }
+
+    var isPro: Bool {
+        switch self {
+        case .url, .text: return false
+        default: return true
+        }
+    }
 }
 
 // MARK: - ErrorCorrectionLevel Enum
