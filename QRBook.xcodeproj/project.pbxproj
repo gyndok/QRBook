@@ -74,6 +74,7 @@
 		BB000113 /* QRAutoLabelerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000113 /* QRAutoLabelerTests.swift */; };
 		BB000114 /* PDFImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000114 /* PDFImportViewModel.swift */; };
 		BB000115 /* PDFImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000115 /* PDFImportViewModelTests.swift */; };
+		BB000116 /* PDFImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000116 /* PDFImportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,7 @@
 		CC000113 /* QRAutoLabelerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRAutoLabelerTests.swift; sourceTree = "<group>"; };
 		CC000114 /* PDFImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFImportViewModel.swift; sourceTree = "<group>"; };
 		CC000115 /* PDFImportViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFImportViewModelTests.swift; sourceTree = "<group>"; };
+		CC000116 /* PDFImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFImportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +309,7 @@
 				DD000011 /* Folders */,
 				DD000012 /* Scanner */,
 				DD000016 /* Flyers */,
+				DD000018 /* PDFImport */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -441,6 +444,14 @@
 				CC000076 /* FlyerGalleryView.swift */,
 			);
 			path = Flyers;
+			sourceTree = "<group>";
+		};
+		DD000018 /* PDFImport */ = {
+			isa = PBXGroup;
+			children = (
+				CC000116 /* PDFImportView.swift */,
+			);
+			path = PDFImport;
 			sourceTree = "<group>";
 		};
 		DD000017 /* QRBookWatch Watch App */ = {
@@ -760,6 +771,7 @@
 				BB000110 /* PDFQRScanner.swift in Sources */,
 				BB000112 /* QRAutoLabeler.swift in Sources */,
 				BB000114 /* PDFImportViewModel.swift in Sources */,
+				BB000116 /* PDFImportView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
