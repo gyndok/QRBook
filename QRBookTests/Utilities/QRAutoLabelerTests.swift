@@ -78,11 +78,24 @@ final class QRAutoLabelerTests: XCTestCase {
         XCTAssertEqual(label.suggestedTitle, "Hello World")
     }
 
+    func test_label_plainText_exactly40_doesNotTruncate() {
+        let text = String(repeating: "A", count: 40)
+        let label = QRAutoLabeler.label(payload: text)
+        XCTAssertEqual(label.suggestedTitle, text)
+    }
+
+    func test_label_plainText_41chars_truncatesTo40() {
+        let text = String(repeating: "A", count: 41)
+        let label = QRAutoLabeler.label(payload: text)
+        XCTAssertEqual(label.suggestedTitle.count, 40)
+        XCTAssertTrue(label.suggestedTitle.hasSuffix("..."))
+    }
+
     func test_label_plainText_long_truncates() {
         let longText = String(repeating: "A", count: 50)
         let label = QRAutoLabeler.label(payload: longText)
+        XCTAssertEqual(label.suggestedTitle.count, 40)
         XCTAssertTrue(label.suggestedTitle.hasSuffix("..."))
-        XCTAssertTrue(label.suggestedTitle.count <= 40)
     }
 
     // MARK: - Tag Suggestion
