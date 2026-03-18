@@ -68,6 +68,8 @@
 		BB000098 /* ColorHexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000098 /* ColorHexTests.swift */; };
 		BB000100 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000100 /* StoreManager.swift */; };
 		BB000101 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000101 /* PaywallView.swift */; };
+		BB000110 /* PDFQRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000110 /* PDFQRScanner.swift */; };
+		BB000111 /* PDFQRScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000111 /* PDFQRScannerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +181,8 @@
 		CC000100 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		CC000101 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		CC000102 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
+		CC000110 /* PDFQRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFQRScanner.swift; sourceTree = "<group>"; };
+		CC000111 /* PDFQRScannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFQRScannerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +315,7 @@
 				CC000068 /* WidgetDataWriter.swift */,
 				CC000077 /* WatchConnector.swift */,
 				CC000084 /* DataSyncManager.swift */,
+				CC000110 /* PDFQRScanner.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -465,6 +470,7 @@
 				CC000091 /* ValidationTests.swift */,
 				CC000092 /* QRDataEncoderTests.swift */,
 				CC000093 /* QRDataDecoderTests.swift */,
+				CC000111 /* PDFQRScannerTests.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -739,6 +745,7 @@
 				BB000084 /* DataSyncManager.swift in Sources */,
 				BB000100 /* StoreManager.swift in Sources */,
 				BB000101 /* PaywallView.swift in Sources */,
+				BB000110 /* PDFQRScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -781,6 +788,7 @@
 				BB000096 /* QRLibraryViewModelTests.swift in Sources */,
 				BB000097 /* DeepLinkRouterTests.swift in Sources */,
 				BB000098 /* ColorHexTests.swift in Sources */,
+				BB000111 /* PDFQRScannerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
