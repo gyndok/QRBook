@@ -6,6 +6,7 @@ struct ScannerView: View {
     @State private var scannedCode: String?
     @State private var detectedType: QRType = .text
     @State private var showSaveSheet = false
+    @State private var showPDFImport = false
 
     var body: some View {
         NavigationStack {
@@ -86,6 +87,18 @@ struct ScannerView: View {
             }
             .sheet(isPresented: $showSaveSheet) {
                 CreateQRView(prefillData: scannedCode, prefillType: detectedType)
+            }
+            .sheet(isPresented: $showPDFImport) {
+                PDFImportView()
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showPDFImport = true
+                    } label: {
+                        Label("Import PDF", systemImage: "doc.text.viewfinder")
+                    }
+                }
             }
         }
     }
