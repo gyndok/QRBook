@@ -24,6 +24,12 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+# Worktrees
+.worktrees/
+
+# Superpowers
+.superpowers/
+
 # Misc
 *.ipa
 *.dSYM.zip
