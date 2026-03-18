@@ -70,6 +70,8 @@
 		BB000101 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000101 /* PaywallView.swift */; };
 		BB000110 /* PDFQRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000110 /* PDFQRScanner.swift */; };
 		BB000111 /* PDFQRScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000111 /* PDFQRScannerTests.swift */; };
+		BB000112 /* QRAutoLabeler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000112 /* QRAutoLabeler.swift */; };
+		BB000113 /* QRAutoLabelerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000113 /* QRAutoLabelerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,6 +185,8 @@
 		CC000102 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		CC000110 /* PDFQRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFQRScanner.swift; sourceTree = "<group>"; };
 		CC000111 /* PDFQRScannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFQRScannerTests.swift; sourceTree = "<group>"; };
+		CC000112 /* QRAutoLabeler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRAutoLabeler.swift; sourceTree = "<group>"; };
+		CC000113 /* QRAutoLabelerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRAutoLabelerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +320,7 @@
 				CC000077 /* WatchConnector.swift */,
 				CC000084 /* DataSyncManager.swift */,
 				CC000110 /* PDFQRScanner.swift */,
+				CC000112 /* QRAutoLabeler.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -471,6 +476,7 @@
 				CC000092 /* QRDataEncoderTests.swift */,
 				CC000093 /* QRDataDecoderTests.swift */,
 				CC000111 /* PDFQRScannerTests.swift */,
+				CC000113 /* QRAutoLabelerTests.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -746,6 +752,7 @@
 				BB000100 /* StoreManager.swift in Sources */,
 				BB000101 /* PaywallView.swift in Sources */,
 				BB000110 /* PDFQRScanner.swift in Sources */,
+				BB000112 /* QRAutoLabeler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +796,7 @@
 				BB000097 /* DeepLinkRouterTests.swift in Sources */,
 				BB000098 /* ColorHexTests.swift in Sources */,
 				BB000111 /* PDFQRScannerTests.swift in Sources */,
+				BB000113 /* QRAutoLabelerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
