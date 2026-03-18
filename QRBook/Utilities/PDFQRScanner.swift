@@ -4,14 +4,18 @@ import PDFKit
 import Vision
 
 /// A QR/barcode detected within a PDF document.
-struct DetectedQRCode: Identifiable, Equatable {
+struct DetectedQRCode: Identifiable, Hashable {
     let id: UUID
     let payload: String
     let symbology: VNBarcodeSymbology
     var pageNumbers: [Int]
 
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
     static func == (lhs: DetectedQRCode, rhs: DetectedQRCode) -> Bool {
-        lhs.payload == rhs.payload
+        lhs.id == rhs.id
     }
 }
 
@@ -48,6 +52,7 @@ enum PDFQRScanner {
         var allDetected: [DetectedQRCode] = []
 
         for pageIndex in 0..<pageCount {
+            try Task.checkCancellation()
             await MainActor.run { progressHandler(pageIndex + 1, pageCount) }
 
             guard let page = document.page(at: pageIndex),
