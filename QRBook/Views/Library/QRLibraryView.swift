@@ -14,6 +14,7 @@ struct QRLibraryView: View {
     @State private var selectedQR: QRCode?
     @State private var showDeleteConfirm = false
     @State private var showPaywall = false
+    @State private var showPDFImport = false
     @Environment(\.modelContext) private var modelContext
     @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
     @Environment(StoreManager.self) private var storeManager
@@ -52,6 +53,11 @@ struct QRLibraryView: View {
                                 Button { viewModel.isSelectMode = true } label: {
                                     Image(systemName: "checkmark.circle")
                                 }
+                            }
+                            Button {
+                                showPDFImport = true
+                            } label: {
+                                Image(systemName: "doc.text.viewfinder")
                             }
                             Button {
                                 if qrCodes.count >= StoreManager.freeCodeLimit && !storeManager.isProUnlocked {
@@ -100,6 +106,9 @@ struct QRLibraryView: View {
                 QRFilterSheet(viewModel: viewModel, allTags: viewModel.allTags(from: qrCodes))
             }
             .sheet(isPresented: $showPaywall) { PaywallView() }
+            .sheet(isPresented: $showPDFImport) {
+                PDFImportView()
+            }
             .fullScreenCover(item: $selectedQR) { qr in
                 QRFullscreenView(
                     qrCode: qr,
