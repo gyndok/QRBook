@@ -7,6 +7,7 @@ class DeepLinkRouter {
     var showCreateSheet = false
     var pendingShareData: String?
     var pendingShareType: String?
+    var pendingPDFURL: URL?
 
     func handleQuickAction(_ shortcutType: String) {
         switch shortcutType {
@@ -25,6 +26,11 @@ class DeepLinkRouter {
     func showQRCode(id: UUID) {
         selectedTab = .library
         showQRCodeId = id
+    }
+
+    func handlePendingPDF(url: URL) {
+        pendingPDFURL = url
+        selectedTab = .scan
     }
 
     func handlePendingShare(data: String, type: String) {

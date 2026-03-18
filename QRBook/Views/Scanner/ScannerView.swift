@@ -3,9 +3,11 @@ import VisionKit
 
 struct ScannerView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
     @State private var scannedCode: String?
     @State private var detectedType: QRType = .text
     @State private var showSaveSheet = false
+    @State private var showPDFImport = false
 
     var body: some View {
         NavigationStack {
@@ -84,8 +86,32 @@ struct ScannerView: View {
                     HapticManager.success()
                 }
             }
+            .onChange(of: router?.pendingPDFURL) { _, url in
+                if url != nil {
+                    showPDFImport = true
+                }
+            }
             .sheet(isPresented: $showSaveSheet) {
                 CreateQRView(prefillData: scannedCode, prefillType: detectedType)
+            }
+            .sheet(isPresented: $showPDFImport) {
+                PDFImportView(preloadedPDFURL: router?.pendingPDFURL)
+                    .onDisappear {
+                        // Clean up the shared PDF file
+                        if let url = router?.pendingPDFURL {
+                            try? FileManager.default.removeItem(at: url)
+                            router?.pendingPDFURL = nil
+                        }
+                    }
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showPDFImport = true
+                    } label: {
+                        Label("Import PDF", systemImage: "doc.text.viewfinder")
+                    }
+                }
             }
         }
     }
