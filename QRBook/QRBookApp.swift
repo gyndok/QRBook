@@ -99,6 +99,12 @@ struct QRBookApp: App {
                 try? fm.removeItem(at: file)
             }
         }
+
+        for file in files where file.lastPathComponent.hasPrefix("shared-pdf-") {
+            router.handlePendingPDF(url: file)
+            // Don't delete yet — PDFImportView will handle cleanup after scanning
+            break  // Handle one at a time
+        }
     }
 }
 
