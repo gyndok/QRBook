@@ -1,7 +1,53 @@
+import SwiftData
 import XCTest
 @testable import QRBook
 
 final class QRCodeModelTests: XCTestCase {
+
+    // MARK: - ScanEvent history capping
+
+    @MainActor
+    func test_scanEvent_record_prunesToLimit() throws {
+        let container = try ModelContainer(
+            for: ScanEvent.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        let context = container.mainContext
+        let codeId = UUID()
+        let otherId = UUID()
+
+        for _ in 0..<10 {
+            ScanEvent.record(qrCodeId: codeId, in: context, keeping: 5)
+        }
+        ScanEvent.record(qrCodeId: otherId, in: context, keeping: 5)
+
+        let forCode = try context.fetch(
+            FetchDescriptor<ScanEvent>(predicate: #Predicate { $0.qrCodeId == codeId })
+        )
+        XCTAssertEqual(forCode.count, 5, "history should be capped per code")
+
+        let forOther = try context.fetch(
+            FetchDescriptor<ScanEvent>(predicate: #Predicate { $0.qrCodeId == otherId })
+        )
+        XCTAssertEqual(forOther.count, 1, "pruning one code must not affect another")
+    }
+
+    @MainActor
+    func test_scanEvent_record_underLimit_keepsAll() throws {
+        let container = try ModelContainer(
+            for: ScanEvent.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        let context = container.mainContext
+        let codeId = UUID()
+        for _ in 0..<3 {
+            ScanEvent.record(qrCodeId: codeId, in: context, keeping: 5)
+        }
+        let events = try context.fetch(
+            FetchDescriptor<ScanEvent>(predicate: #Predicate { $0.qrCodeId == codeId })
+        )
+        XCTAssertEqual(events.count, 3)
+    }
 
     // MARK: - QRType enum
 

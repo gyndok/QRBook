@@ -223,8 +223,7 @@ struct QRFullscreenView: View {
     private func recordScan() {
         currentQR.scanCount += 1
         currentQR.lastUsed = .now
-        let event = ScanEvent(qrCodeId: currentQR.id)
-        modelContext.insert(event)
+        ScanEvent.record(qrCodeId: currentQR.id, in: modelContext)
     }
 
     private func saveToPhotos() {

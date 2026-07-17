@@ -5,19 +5,33 @@ import CoreSpotlight
 
 @main
 struct QRBookApp: App {
-    /// CloudKit-backed container with a local-only fallback so the app still
-    /// launches when the CloudKit container is unavailable (no provisioning,
-    /// simulator without iCloud, etc.).
+    /// QRCode/Folder sync via CloudKit; ScanEvent lives in a separate
+    /// local-only store. Scan history is per-device telemetry that grows on
+    /// every view — syncing it to CloudKit floods the mirror with unbounded
+    /// writes (which saturated the store and stalled sync). A local-only
+    /// fallback for the synced store keeps the app launchable when the
+    /// CloudKit container is unavailable (no provisioning, simulator, etc.).
     private static let sharedModelContainer: ModelContainer = {
-        let schema = Schema([QRCode.self, Folder.self, ScanEvent.self])
+        let fullSchema = Schema([QRCode.self, Folder.self, ScanEvent.self])
+        let scanHistoryConfig = ModelConfiguration(
+            "ScanHistory",
+            schema: Schema([ScanEvent.self]),
+            cloudKitDatabase: .none
+        )
         do {
-            let cloud = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.gyndok.QRBook"))
-            return try ModelContainer(for: schema, configurations: [cloud])
+            let cloud = ModelConfiguration(
+                schema: Schema([QRCode.self, Folder.self]),
+                cloudKitDatabase: .private("iCloud.com.gyndok.QRBook")
+            )
+            return try ModelContainer(for: fullSchema, configurations: cloud, scanHistoryConfig)
         } catch {
             print("QRBookApp: CloudKit store unavailable (\(error)); falling back to local-only store")
             do {
-                let local = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-                return try ModelContainer(for: schema, configurations: [local])
+                let local = ModelConfiguration(
+                    schema: Schema([QRCode.self, Folder.self]),
+                    cloudKitDatabase: .none
+                )
+                return try ModelContainer(for: fullSchema, configurations: local, scanHistoryConfig)
             } catch {
                 fatalError("Unable to create model container: \(error)")
             }
