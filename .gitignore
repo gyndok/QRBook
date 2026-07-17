@@ -38,3 +38,6 @@ fastlane/test_output
 *.hmap
 *.xccheckout
 *.xcscmblueprint
+
+# Claude Code local config & worktrees
+.claude/
