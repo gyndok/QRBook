@@ -97,13 +97,25 @@ struct QRBookWidgetMediumView: View {
     }
 }
 
+struct QRBookWidgetEntryView: View {
+    @Environment(\.widgetFamily) private var family
+    let entry: QRCodeWidgetEntry
+
+    var body: some View {
+        switch family {
+        case .systemMedium:
+            QRBookWidgetMediumView(entry: entry)
+        default:
+            QRBookWidgetSmallView(entry: entry)
+        }
+    }
+}
+
 @main
 struct QRBookWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "QRBookWidget", provider: QRBookWidgetProvider()) { entry in
-            if #available(iOSApplicationExtension 17.0, *) {
-                QRBookWidgetSmallView(entry: entry)
-            }
+            QRBookWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("QR Book")
         .description("Display a QR code for quick access.")

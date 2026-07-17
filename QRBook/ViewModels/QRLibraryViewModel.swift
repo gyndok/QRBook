@@ -49,15 +49,12 @@ class QRLibraryViewModel {
     func filteredAndSorted(_ qrCodes: [QRCode], viewMode: ViewMode) -> [QRCode] {
         var result = qrCodes
 
-        // Apply view mode
+        // Apply view mode (.recent applies its sort/limit after filtering,
+        // below, so the search bar and filters work on that tab too)
         switch viewMode {
         case .favorites:
             result = result.filter { $0.isFavorite }
-        case .recent:
-            result = result.sorted { ($0.lastUsed ?? .distantPast) > ($1.lastUsed ?? .distantPast) }
-            result = Array(result.prefix(10))
-            return result
-        case .all:
+        case .recent, .all:
             break
         }
 
@@ -91,6 +88,12 @@ class QRLibraryViewModel {
         // Folder filter
         if let filterFolder {
             result = result.filter { $0.folderName == filterFolder }
+        }
+
+        // Recent: most recently used first, capped at 10
+        if viewMode == .recent {
+            result.sort { ($0.lastUsed ?? .distantPast) > ($1.lastUsed ?? .distantPast) }
+            return Array(result.prefix(10))
         }
 
         // Sort

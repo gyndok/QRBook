@@ -2,8 +2,7 @@ import SwiftUI
 import UIKit
 
 struct MainTabView: View {
-    @Environment(DeepLinkRouter.self) private var router: DeepLinkRouter?
-    @State private var selectedTab: Tab = .library
+    @Environment(DeepLinkRouter.self) private var router
 
     enum Tab: String, CaseIterable {
         case library, scan, favorites, recent, flyers
@@ -52,7 +51,11 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        TabView(selection: $selectedTab) {
+        // Bind directly to the router so manual tab switches and deep links
+        // share one source of truth; mirroring into local @State broke repeat
+        // deep links to the already-selected value.
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
             ForEach(Tab.allCases, id: \.self) { tab in
                 Group {
                     switch tab {
@@ -74,16 +77,13 @@ struct MainTabView: View {
                 .tag(tab)
             }
         }
-        .onChange(of: router?.selectedTab) { _, newTab in
-            if let newTab {
-                selectedTab = newTab
-            }
-        }
     }
 }
 
 
 #Preview {
     MainTabView()
+        .environment(DeepLinkRouter())
+        .environment(StoreManager())
         .modelContainer(for: QRCode.self, inMemory: true)
 }

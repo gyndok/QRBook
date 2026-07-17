@@ -135,6 +135,7 @@ struct QRCardView: View {
                     logoImageData: qrCode.logoImageData
                 )
                 modelContext.insert(copy)
+                SpotlightIndexer.indexQRCode(copy)
                 DataSyncManager.syncFavorites(context: modelContext)
                 HapticManager.success()
             } label: { Label("Duplicate", systemImage: "plus.square.on.square") }

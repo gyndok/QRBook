@@ -125,6 +125,7 @@ class PDFImportViewModel {
                 tags: candidate.tags
             )
             context.insert(qrCode)
+            SpotlightIndexer.indexQRCode(qrCode)
         }
 
         let count = selected.count

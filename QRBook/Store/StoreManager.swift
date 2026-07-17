@@ -16,8 +16,11 @@ final class StoreManager {
     private(set) var hasStoreKitEntitlement = false
     private var transactionListener: Task<Void, Never>?
 
-    @ObservationIgnored
-    @AppStorage("devUnlock") var devUnlock = false
+    // Plain tracked property (not @AppStorage) so Observation sees changes and
+    // Pro-gated UI refreshes immediately when it's toggled.
+    var devUnlock: Bool = UserDefaults.standard.bool(forKey: "devUnlock") {
+        didSet { UserDefaults.standard.set(devUnlock, forKey: "devUnlock") }
+    }
 
     var isProUnlocked: Bool {
         hasStoreKitEntitlement || devUnlock
@@ -81,27 +84,27 @@ final class StoreManager {
 
     @MainActor
     func restorePurchases() async {
-        hasStoreKitEntitlement = false
-        for await result in Transaction.currentEntitlements {
-            if let transaction = try? checkVerified(result),
-               transaction.productID == Self.productID {
-                hasStoreKitEntitlement = true
-                return
-            }
-        }
+        // Pull the latest transactions from the App Store first — on a fresh
+        // install the local cache is empty and restore would be a no-op.
+        try? await AppStore.sync()
+        await checkEntitlement()
     }
 
     // MARK: - Check Entitlement on Launch
 
     @MainActor
     func checkEntitlement() async {
+        // Compute into a local and assign once so a transient verification
+        // failure can't downgrade a paying user mid-check.
+        var entitled = false
         for await result in Transaction.currentEntitlements {
             if let transaction = try? checkVerified(result),
                transaction.productID == Self.productID {
-                hasStoreKitEntitlement = true
-                return
+                entitled = true
+                break
             }
         }
+        hasStoreKitEntitlement = entitled
     }
 
     // MARK: - Transaction Listener
@@ -109,16 +112,17 @@ final class StoreManager {
     private func listenForTransactions() -> Task<Void, Never> {
         Task.detached { [weak self] in
             for await result in Transaction.updates {
-                if let transaction = try? self?.checkVerified(result),
-                   transaction.productID == Self.productID {
+                guard let self else { continue }
+                if let transaction = try? self.checkVerified(result),
+                   transaction.productID == StoreManager.productID {
                     if transaction.revocationDate != nil {
                         await MainActor.run {
-                            self?.hasStoreKitEntitlement = false
+                            self.hasStoreKitEntitlement = false
                         }
                     } else {
                         await MainActor.run {
-                            self?.hasStoreKitEntitlement = true
-                            self?.purchaseState = .purchased
+                            self.hasStoreKitEntitlement = true
+                            self.purchaseState = .purchased
                         }
                     }
                     await transaction.finish()

@@ -28,6 +28,22 @@ class QRCreationViewModel {
 
     var validationError: String?
 
+    /// Seeds creation defaults from the Settings screen's "Default Settings"
+    /// section; without this those settings have no effect.
+    init(defaults: UserDefaults = .standard) {
+        if defaults.object(forKey: "defaultSize") != nil {
+            sizePx = defaults.integer(forKey: "defaultSize")
+        }
+        if let level = defaults.string(forKey: "defaultErrorCorrection")
+            .flatMap(ErrorCorrectionLevel.init(rawValue:)) {
+            errorCorrection = level
+        }
+        if defaults.object(forKey: "defaultBrightnessBoost") != nil {
+            brightnessBoostDefault = defaults.bool(forKey: "defaultBrightnessBoost")
+        }
+        isFavorite = defaults.bool(forKey: "defaultAutoFavorite")
+    }
+
     func validate() -> Bool {
         if let error = Validation.validateTitle(title) {
             validationError = error

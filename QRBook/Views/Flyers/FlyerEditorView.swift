@@ -160,11 +160,7 @@ struct FlyerEditorView: View {
         renderer.scale = 3.0
         guard let image = renderer.uiImage else { return }
 
-        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let root = scene.windows.first?.rootViewController {
-            root.present(activityVC, animated: true)
-        }
+        SharePresenter.present(items: [image])
         HapticManager.success()
     }
 }

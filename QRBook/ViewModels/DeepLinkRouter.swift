@@ -2,6 +2,10 @@ import SwiftUI
 
 @Observable
 class DeepLinkRouter {
+    /// Single shared instance so App Intents (which run in-process) can route
+    /// into the same router the view hierarchy observes.
+    static let shared = DeepLinkRouter()
+
     var selectedTab: MainTabView.Tab = .library
     var showQRCodeId: UUID?
     var showCreateSheet = false

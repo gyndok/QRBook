@@ -1,3 +1,4 @@
+import AVFoundation
 import SwiftUI
 import VisionKit
 
@@ -8,11 +9,34 @@ struct ScannerView: View {
     @State private var detectedType: QRType = .text
     @State private var showSaveSheet = false
     @State private var showPDFImport = false
+    @State private var cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
 
     var body: some View {
         NavigationStack {
             ZStack {
-                if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
+                if cameraStatus == .notDetermined {
+                    // DataScanner reports isAvailable == false until camera
+                    // access is granted, so ask before showing "unavailable".
+                    ProgressView()
+                        .task {
+                            let granted = await AVCaptureDevice.requestAccess(for: .video)
+                            cameraStatus = granted ? .authorized : .denied
+                        }
+                } else if cameraStatus != .authorized {
+                    ContentUnavailableView {
+                        Label("Camera Access Needed", systemImage: "camera.fill")
+                    } description: {
+                        Text("Allow camera access in Settings to scan QR codes.")
+                    } actions: {
+                        Button("Open Settings") {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color.electricViolet)
+                    }
+                } else if DataScannerViewController.isSupported && DataScannerViewController.isAvailable {
                     DataScannerRepresentable(scannedCode: $scannedCode)
                         .ignoresSafeArea()
                 } else {
@@ -84,6 +108,13 @@ struct ScannerView: View {
                 if let code = scannedCode {
                     detectedType = detectType(code)
                     HapticManager.success()
+                }
+            }
+            .onAppear {
+                // On cold launch the pending PDF is set before this tab's
+                // content exists, so onChange alone never fires.
+                if router?.pendingPDFURL != nil {
+                    showPDFImport = true
                 }
             }
             .onChange(of: router?.pendingPDFURL) { _, url in

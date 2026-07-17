@@ -216,11 +216,33 @@ struct SettingsView: View {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("qrbook-export.json")
         try? jsonString.write(to: tempURL, atomically: true, encoding: .utf8)
 
-        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+        SharePresenter.present(items: [tempURL])
+    }
+}
 
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootVC = windowScene.windows.first?.rootViewController {
-            rootVC.present(activityVC, animated: true)
+/// Presents a share sheet from the top-most presented view controller.
+/// Presenting from the window's root fails silently when a sheet is already
+/// up, and a missing popover source crashes on iPad.
+@MainActor
+enum SharePresenter {
+    static func present(items: [Any]) {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        guard let scene = scenes.first(where: { $0.activationState == .foregroundActive }) ?? scenes.first,
+              let root = scene.keyWindow?.rootViewController ?? scene.windows.first?.rootViewController else {
+            return
         }
+
+        var top = root
+        while let presented = top.presentedViewController {
+            top = presented
+        }
+
+        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        if let popover = activityVC.popoverPresentationController {
+            popover.sourceView = top.view
+            popover.sourceRect = CGRect(x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
+        top.present(activityVC, animated: true)
     }
 }

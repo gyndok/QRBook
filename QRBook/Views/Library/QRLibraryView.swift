@@ -116,12 +116,19 @@ struct QRLibraryView: View {
                 )
             }
             .onChange(of: router?.showQRCodeId) { _, id in
-                if let id, let qr = qrCodes.first(where: { $0.id == id }) {
+                // Three QRLibraryView instances are live (one per tab); only
+                // the Library tab responds so the cover isn't presented from
+                // a hidden tab and the handlers don't race to clear state.
+                guard viewMode == .all, let id else { return }
+                if let qr = qrCodes.first(where: { $0.id == id }) {
                     selectedQR = qr
-                    router?.showQRCodeId = nil
                 }
+                // Clear even when not found (e.g. stale Spotlight entry for a
+                // deleted code) so the router doesn't hold the id forever.
+                router?.showQRCodeId = nil
             }
             .onChange(of: router?.showCreateSheet) { _, show in
+                guard viewMode == .all else { return }
                 if show == true {
                     if let data = router?.pendingShareData {
                         let type = router?.pendingShareType
@@ -329,6 +336,7 @@ struct QRLibraryView: View {
 
     private func batchDelete() {
         for qr in qrCodes where viewModel.selectedIds.contains(qr.id) {
+            SpotlightIndexer.removeQRCode(id: qr.id)
             modelContext.delete(qr)
         }
         DataSyncManager.syncFavorites(context: modelContext)

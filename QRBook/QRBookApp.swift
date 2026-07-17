@@ -6,8 +6,9 @@ import CoreSpotlight
 @main
 struct QRBookApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showSplash = true
-    @State private var router = DeepLinkRouter()
+    @State private var router = DeepLinkRouter.shared
     @State private var storeManager = StoreManager()
     @AppStorage("appearanceMode") private var appearanceMode = "dark"
 
@@ -36,11 +37,24 @@ struct QRBookApp: App {
             .onAppear {
                 checkPendingShareImports()
                 setupQuickActions()
+                // onChange doesn't fire for a value set before the view
+                // appeared (cold launch from a quick action).
+                if let action = appDelegate.shortcutAction {
+                    router.handleQuickAction(action)
+                    appDelegate.shortcutAction = nil
+                }
                 Task { await storeManager.checkEntitlement() }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                     withAnimation(.easeOut(duration: 0.4)) {
                         showSplash = false
                     }
+                }
+            }
+            .onChange(of: scenePhase) { _, phase in
+                // Shares can arrive while the app is suspended; re-check every
+                // time we come to the foreground, not just on cold launch.
+                if phase == .active {
+                    checkPendingShareImports()
                 }
             }
             .onChange(of: appDelegate.shortcutAction) { _, action in
@@ -90,12 +104,22 @@ struct QRBookApp: App {
         let fm = FileManager.default
         guard let files = try? fm.contentsOfDirectory(at: containerURL, includingPropertiesForKeys: nil) else { return }
 
+        // Handle one share per pass: the router holds a single pending share,
+        // so processing them all here would overwrite and lose all but the
+        // last. Remaining files are picked up on the next foreground pass.
+        // (onAppear and the initial scenePhase transition both call this at
+        // launch, hence the pending guard.)
+        guard router.pendingShareData == nil else { return }
         for file in files where file.lastPathComponent.hasPrefix("shared-import-") {
             if let data = try? Data(contentsOf: file),
                let payload = try? JSONSerialization.jsonObject(with: data) as? [String: String],
                let qrData = payload["data"],
                let typeStr = payload["type"] {
                 router.handlePendingShare(data: qrData, type: typeStr)
+                try? fm.removeItem(at: file)
+                break
+            } else {
+                // Unreadable/corrupt payload — remove so it can't wedge the queue.
                 try? fm.removeItem(at: file)
             }
         }
@@ -108,8 +132,10 @@ struct QRBookApp: App {
     }
 }
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    var shortcutAction: String?
+// ObservableObject conformance is required for @UIApplicationDelegateAdaptor
+// to publish changes; without it, .onChange(of: shortcutAction) never fires.
+class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
+    @Published var shortcutAction: String?
 
     func application(
         _ application: UIApplication,

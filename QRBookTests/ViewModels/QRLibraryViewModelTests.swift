@@ -57,6 +57,24 @@ final class QRLibraryViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 10)
     }
 
+    func test_filteredAndSorted_recentMode_appliesSearch() {
+        let codes = makeSampleCodes()
+        vm.searchText = "Alpha"
+        let result = vm.filteredAndSorted(codes, viewMode: .recent)
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result.first?.title, "Alpha")
+    }
+
+    func test_filteredAndSorted_recentMode_appliesTypeFilter() {
+        let codes = [
+            TestData.makeQRCode(title: "Site", type: .url, lastUsed: .now),
+            TestData.makeQRCode(title: "Note", type: .text, lastUsed: .now)
+        ]
+        vm.filterType = .text
+        let result = vm.filteredAndSorted(codes, viewMode: .recent)
+        XCTAssertEqual(result.map(\.title), ["Note"])
+    }
+
     // MARK: - filteredAndSorted — search
 
     func test_filteredAndSorted_searchText_matchesTitle() {

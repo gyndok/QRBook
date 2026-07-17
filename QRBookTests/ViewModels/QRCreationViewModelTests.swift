@@ -16,6 +16,37 @@ final class QRCreationViewModelTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - init(defaults:)
+
+    func test_init_seedsFromStoredDefaults() {
+        let suiteName = "test-creation-defaults"
+        let suite = UserDefaults(suiteName: suiteName)!
+        suite.removePersistentDomain(forName: suiteName)
+        suite.set(1024, forKey: "defaultSize")
+        suite.set("H", forKey: "defaultErrorCorrection")
+        suite.set(false, forKey: "defaultBrightnessBoost")
+        suite.set(true, forKey: "defaultAutoFavorite")
+        defer { suite.removePersistentDomain(forName: suiteName) }
+
+        let seeded = QRCreationViewModel(defaults: suite)
+        XCTAssertEqual(seeded.sizePx, 1024)
+        XCTAssertEqual(seeded.errorCorrection, .H)
+        XCTAssertFalse(seeded.brightnessBoostDefault)
+        XCTAssertTrue(seeded.isFavorite)
+    }
+
+    func test_init_noStoredDefaults_usesBuiltInDefaults() {
+        let suiteName = "test-creation-defaults-empty"
+        let suite = UserDefaults(suiteName: suiteName)!
+        suite.removePersistentDomain(forName: suiteName)
+
+        let fresh = QRCreationViewModel(defaults: suite)
+        XCTAssertEqual(fresh.sizePx, 512)
+        XCTAssertEqual(fresh.errorCorrection, .M)
+        XCTAssertTrue(fresh.brightnessBoostDefault)
+        XCTAssertFalse(fresh.isFavorite)
+    }
+
     // MARK: - syncColors()
 
     func test_syncColors_defaultBlackOnWhite_producesCorrectHex() {
