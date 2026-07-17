@@ -27,23 +27,24 @@ final class QRLibraryViewModelTests: XCTestCase {
         ]
     }
 
-    // MARK: - QRFullscreenView initial index (tap → correct card)
+    // MARK: - QRFullscreenView displayed card (identity, not index)
 
-    func test_fullscreenInitialIndex_tappedMiddleCard_resolvesItsPosition() {
-        let codes = makeSampleCodes()
-        let tapped = codes[1]
-        XCTAssertEqual(QRFullscreenView.initialIndex(for: tapped, in: codes), 1)
+    func test_fullscreenResolvedCard_afterReorder_stillReturnsTappedCard() {
+        let codes = makeSampleCodes() // [Alpha, Beta, Gamma]
+        let tapped = codes[1]         // Beta
+        // Simulate the "Recent" sort re-ordering the list while the cover is
+        // open (recordScan bumps lastUsed): Beta is no longer at its old index.
+        let reordered = [codes[2], codes[0], codes[1]]
+        let resolved = QRFullscreenView.resolvedCard(id: tapped.id, in: reordered, fallback: tapped)
+        XCTAssertEqual(resolved.id, tapped.id)
+        XCTAssertEqual(resolved.title, "Beta")
     }
 
-    func test_fullscreenInitialIndex_tappedLastCard_resolvesItsPosition() {
-        let codes = makeSampleCodes()
-        XCTAssertEqual(QRFullscreenView.initialIndex(for: codes[2], in: codes), 2)
-    }
-
-    func test_fullscreenInitialIndex_cardNotInList_fallsBackToZero() {
+    func test_fullscreenResolvedCard_cardNotInList_returnsFallback() {
         let codes = makeSampleCodes()
         let stray = TestData.makeQRCode(title: "Stray")
-        XCTAssertEqual(QRFullscreenView.initialIndex(for: stray, in: codes), 0)
+        let resolved = QRFullscreenView.resolvedCard(id: stray.id, in: codes, fallback: stray)
+        XCTAssertEqual(resolved.id, stray.id)
     }
 
     // MARK: - filteredAndSorted — view modes

@@ -7,7 +7,11 @@ struct QRFullscreenView: View {
     let allQRCodes: [QRCode]
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @State private var currentIndex: Int = 0
+    // Track the displayed card by identity, not by list index: under the
+    // "Recent" sort, recordScan() bumps lastUsed and the @Query re-sorts the
+    // list while the cover is open, so a stored index would point at a
+    // different card.
+    @State private var currentID: UUID
     @State private var brightnessBoost = false
     @State private var previousBrightness: CGFloat = 0.5
     @State private var dragOffset: CGFloat = 0
@@ -18,20 +22,21 @@ struct QRFullscreenView: View {
     init(qrCode: QRCode, allQRCodes: [QRCode]) {
         self._qrCode = Bindable(qrCode)
         self.allQRCodes = allQRCodes
-        // Resolve the tapped card's position up front. Doing this in .onAppear
-        // instead left currentIndex at 0 for the first frames, so the cover
-        // rendered allQRCodes[0] (the top of the list) rather than the tapped
-        // card until onAppear ran — and kept a stale index on a reused cover.
-        self._currentIndex = State(initialValue: Self.initialIndex(for: qrCode, in: allQRCodes))
+        self._currentID = State(initialValue: qrCode.id)
     }
 
-    static func initialIndex(for qrCode: QRCode, in allQRCodes: [QRCode]) -> Int {
-        allQRCodes.firstIndex { $0.id == qrCode.id } ?? 0
+    /// Resolves the displayed card by identity so a live re-sort of the list
+    /// can't leave a stored index pointing at the wrong card.
+    static func resolvedCard(id: UUID, in allQRCodes: [QRCode], fallback: QRCode) -> QRCode {
+        allQRCodes.first { $0.id == id } ?? fallback
     }
 
     private var currentQR: QRCode {
-        guard currentIndex >= 0, currentIndex < allQRCodes.count else { return qrCode }
-        return allQRCodes[currentIndex]
+        Self.resolvedCard(id: currentID, in: allQRCodes, fallback: qrCode)
+    }
+
+    private var currentIndex: Int {
+        allQRCodes.firstIndex { $0.id == currentID } ?? 0
     }
 
     var body: some View {
@@ -125,13 +130,14 @@ struct QRFullscreenView: View {
                                 }
                                 .onEnded { value in
                                     let threshold: CGFloat = 50
+                                    let idx = currentIndex
                                     withAnimation(.spring(response: 0.3)) {
-                                        if value.translation.width < -threshold, currentIndex < allQRCodes.count - 1 {
-                                            currentIndex += 1
+                                        if value.translation.width < -threshold, idx < allQRCodes.count - 1 {
+                                            currentID = allQRCodes[idx + 1].id
                                             recordScan()
                                             HapticManager.impact()
-                                        } else if value.translation.width > threshold, currentIndex > 0 {
-                                            currentIndex -= 1
+                                        } else if value.translation.width > threshold, idx > 0 {
+                                            currentID = allQRCodes[idx - 1].id
                                             recordScan()
                                             HapticManager.impact()
                                         }
