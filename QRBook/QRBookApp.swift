@@ -5,6 +5,24 @@ import CoreSpotlight
 
 @main
 struct QRBookApp: App {
+    /// CloudKit-backed container with a local-only fallback so the app still
+    /// launches when the CloudKit container is unavailable (no provisioning,
+    /// simulator without iCloud, etc.).
+    private static let sharedModelContainer: ModelContainer = {
+        let schema = Schema([QRCode.self, Folder.self, ScanEvent.self])
+        do {
+            let cloud = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.gyndok.QRBook"))
+            return try ModelContainer(for: schema, configurations: [cloud])
+        } catch {
+            print("QRBookApp: CloudKit store unavailable (\(error)); falling back to local-only store")
+            do {
+                let local = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+                return try ModelContainer(for: schema, configurations: [local])
+            } catch {
+                fatalError("Unable to create model container: \(error)")
+            }
+        }
+    }()
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
     @State private var showSplash = true
@@ -70,7 +88,7 @@ struct QRBookApp: App {
                 }
             }
         }
-        .modelContainer(for: [QRCode.self, Folder.self, ScanEvent.self])
+        .modelContainer(Self.sharedModelContainer)
     }
 
     private func setupQuickActions() {

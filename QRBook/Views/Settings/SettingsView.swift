@@ -1,3 +1,4 @@
+import CloudKit
 import SwiftUI
 import SwiftData
 import UIKit
@@ -17,6 +18,15 @@ struct SettingsView: View {
     @State private var versionTapCount = 0
     @State private var showDevUnlockAlert = false
     @State private var devCode = ""
+    @State private var iCloudStatus: CKAccountStatus?
+
+    private var iCloudStatusLabel: String {
+        switch iCloudStatus {
+        case .available: "Enabled"
+        case nil: "Checking…"
+        default: "Off — sign in to iCloud"
+        }
+    }
 
     var body: some View {
         List {
@@ -169,8 +179,11 @@ struct SettingsView: View {
                         }
                     }
                     #endif
-                LabeledContent("iCloud Sync", value: "Enabled")
+                LabeledContent("iCloud Sync", value: iCloudStatusLabel)
             }
+        }
+        .task {
+            iCloudStatus = try? await CKContainer(identifier: "iCloud.com.gyndok.QRBook").accountStatus()
         }
         .navigationTitle("Settings")
         .sheet(isPresented: $showPaywall) { PaywallView() }

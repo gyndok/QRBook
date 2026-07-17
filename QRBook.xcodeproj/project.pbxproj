@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		44CC02512F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 44CC02502F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy */; };
+		AA000901 /* QRBookShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002 /* QRBookShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA000902 /* QRBookWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000003 /* QRBookWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA000903 /* QRBookWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AA000004 /* QRBookWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB000001 /* QRBookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000001 /* QRBookApp.swift */; };
 		BB000002 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002 /* QRCode.swift */; };
 		BB000003 /* QRGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000003 /* QRGenerator.swift */; };
@@ -75,9 +78,6 @@
 		BB000114 /* PDFImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000114 /* PDFImportViewModel.swift */; };
 		BB000115 /* PDFImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000115 /* PDFImportViewModelTests.swift */; };
 		BB000116 /* PDFImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000116 /* PDFImportView.swift */; };
-		AA000901 /* QRBookShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002 /* QRBookShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		AA000902 /* QRBookWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000003 /* QRBookWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		AA000903 /* QRBookWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AA000004 /* QRBookWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -878,9 +878,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRBook/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Snap Vault uses the camera to scan QR codes.";
@@ -895,7 +896,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -911,9 +912,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRBook/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "QR Snap Vault uses the camera to scan QR codes.";
@@ -928,7 +930,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
