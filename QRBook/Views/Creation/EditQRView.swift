@@ -125,6 +125,7 @@ struct EditQRView: View {
                                 .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
                             ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
                                 .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                            QRLogoPickerRow(viewModel: viewModel)
                         }
                     }
                 }

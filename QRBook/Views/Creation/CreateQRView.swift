@@ -116,6 +116,7 @@ struct CreateQRView: View {
                                 .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
                             ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
                                 .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                            QRLogoPickerRow(viewModel: viewModel)
                         } else {
                             Button {
                                 showPaywall = true
@@ -123,14 +124,16 @@ struct CreateQRView: View {
                                 HStack {
                                     Label("Custom Colors", systemImage: "paintbrush")
                                     Spacer()
-                                    Text("PRO")
-                                        .font(.caption2)
-                                        .fontWeight(.semibold)
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(Color.electricViolet)
-                                        .foregroundStyle(.white)
-                                        .clipShape(Capsule())
+                                    ProBadge()
+                                }
+                            }
+                            Button {
+                                showPaywall = true
+                            } label: {
+                                HStack {
+                                    Label("Logo", systemImage: "photo")
+                                    Spacer()
+                                    ProBadge()
                                 }
                             }
                         }
@@ -312,5 +315,61 @@ struct TypeCard: View {
             )
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Shared Pro Rows
+
+struct ProBadge: View {
+    var body: some View {
+        Text("PRO")
+            .font(.caption2)
+            .fontWeight(.semibold)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Color.electricViolet)
+            .foregroundStyle(.white)
+            .clipShape(Capsule())
+    }
+}
+
+/// Photo-picker row for the QR center logo (Pro). Shown in both Create and
+/// Edit; selection is downscaled and error correction bumped by the view model.
+struct QRLogoPickerRow: View {
+    let viewModel: QRCreationViewModel
+    @State private var pickerItem: PhotosPickerItem?
+
+    var body: some View {
+        PhotosPicker(selection: $pickerItem, matching: .images) {
+            HStack {
+                Label("Logo", systemImage: "photo")
+                Spacer()
+                if let data = viewModel.logoImageData, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 28, height: 28)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                } else {
+                    Text("None")
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .onChange(of: pickerItem) { _, item in
+            guard let item else { return }
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self) {
+                    viewModel.setLogo(fromImageData: data)
+                }
+                pickerItem = nil
+            }
+        }
+
+        if viewModel.logoImageData != nil {
+            Button("Remove Logo", role: .destructive) {
+                viewModel.removeLogo()
+            }
+        }
     }
 }

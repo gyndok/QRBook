@@ -113,6 +113,35 @@ class QRCreationViewModel {
         tags.removeAll { $0 == tag }
     }
 
+    /// Stores a logo image, downscaled so large photos don't bloat the
+    /// SwiftData store (and CloudKit sync payloads). The logo overlay obscures
+    /// the QR center, so error correction is raised to High to keep the code
+    /// scannable.
+    func setLogo(fromImageData data: Data) {
+        guard let image = UIImage(data: data) else { return }
+
+        let maxDimension: CGFloat = 512
+        let largest = max(image.size.width, image.size.height)
+        if largest > maxDimension {
+            let scale = maxDimension / largest
+            let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = 1
+            let resized = UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
+                image.draw(in: CGRect(origin: .zero, size: newSize))
+            }
+            logoImageData = resized.pngData()
+        } else {
+            logoImageData = data
+        }
+
+        errorCorrection = .H
+    }
+
+    func removeLogo() {
+        logoImageData = nil
+    }
+
     func syncColors() {
         foregroundHex = Self.hexString(from: UIColor(foregroundColor)) ?? "000000"
         backgroundHex = Self.hexString(from: UIColor(backgroundColor)) ?? "FFFFFF"

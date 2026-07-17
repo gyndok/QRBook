@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import XCTest
 @testable import QRBook
 
@@ -45,6 +46,50 @@ final class QRCreationViewModelTests: XCTestCase {
         XCTAssertEqual(fresh.errorCorrection, .M)
         XCTAssertTrue(fresh.brightnessBoostDefault)
         XCTAssertFalse(fresh.isFavorite)
+    }
+
+    // MARK: - setLogo(fromImageData:)
+
+    private func makeImageData(width: CGFloat, height: CGFloat) -> Data {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let image = UIGraphicsImageRenderer(size: CGSize(width: width, height: height), format: format).image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        }
+        return image.pngData()!
+    }
+
+    func test_setLogo_largeImage_downscalesTo512() {
+        vm.setLogo(fromImageData: makeImageData(width: 2000, height: 1000))
+        let stored = UIImage(data: vm.logoImageData ?? Data())
+        XCTAssertNotNil(stored)
+        XCTAssertLessThanOrEqual(max(stored!.size.width, stored!.size.height), 512)
+    }
+
+    func test_setLogo_smallImage_storedUnchanged() {
+        let data = makeImageData(width: 100, height: 100)
+        vm.setLogo(fromImageData: data)
+        XCTAssertEqual(vm.logoImageData, data)
+    }
+
+    func test_setLogo_bumpsErrorCorrectionToHigh() {
+        vm.errorCorrection = .M
+        vm.setLogo(fromImageData: makeImageData(width: 100, height: 100))
+        XCTAssertEqual(vm.errorCorrection, .H)
+    }
+
+    func test_setLogo_invalidData_ignored() {
+        vm.errorCorrection = .M
+        vm.setLogo(fromImageData: Data([0x00, 0x01]))
+        XCTAssertNil(vm.logoImageData)
+        XCTAssertEqual(vm.errorCorrection, .M)
+    }
+
+    func test_removeLogo_clearsData() {
+        vm.setLogo(fromImageData: makeImageData(width: 100, height: 100))
+        vm.removeLogo()
+        XCTAssertNil(vm.logoImageData)
     }
 
     // MARK: - syncColors()
