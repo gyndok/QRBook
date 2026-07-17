@@ -15,6 +15,20 @@ struct QRFullscreenView: View {
     @State private var showHistory = false
     @State private var showPhotoSaveError = false
 
+    init(qrCode: QRCode, allQRCodes: [QRCode]) {
+        self._qrCode = Bindable(qrCode)
+        self.allQRCodes = allQRCodes
+        // Resolve the tapped card's position up front. Doing this in .onAppear
+        // instead left currentIndex at 0 for the first frames, so the cover
+        // rendered allQRCodes[0] (the top of the list) rather than the tapped
+        // card until onAppear ran — and kept a stale index on a reused cover.
+        self._currentIndex = State(initialValue: Self.initialIndex(for: qrCode, in: allQRCodes))
+    }
+
+    static func initialIndex(for qrCode: QRCode, in allQRCodes: [QRCode]) -> Int {
+        allQRCodes.firstIndex { $0.id == qrCode.id } ?? 0
+    }
+
     private var currentQR: QRCode {
         guard currentIndex >= 0, currentIndex < allQRCodes.count else { return qrCode }
         return allQRCodes[currentIndex]
@@ -150,7 +164,6 @@ struct QRFullscreenView: View {
             }
         }
         .onAppear {
-            currentIndex = allQRCodes.firstIndex(where: { $0.id == qrCode.id }) ?? 0
             previousBrightness = UIScreen.main.brightness
             if qrCode.brightnessBoostDefault {
                 brightnessBoost = true

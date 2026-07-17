@@ -114,6 +114,9 @@ struct QRLibraryView: View {
                     qrCode: qr,
                     allQRCodes: displayedCodes
                 )
+                // Fresh view identity per card so SwiftUI can't reuse a prior
+                // presentation's @State (which would show the last-viewed card).
+                .id(qr.id)
             }
             .onChange(of: router?.showQRCodeId) { _, id in
                 // Three QRLibraryView instances are live (one per tab); only

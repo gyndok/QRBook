@@ -1,3 +1,4 @@
+import SwiftUI
 import XCTest
 @testable import QRBook
 
@@ -24,6 +25,25 @@ final class QRLibraryViewModelTests: XCTestCase {
             TestData.makeQRCode(title: "Beta", data: "https://beta.com", type: .text, tags: ["personal"], isFavorite: false, scanCount: 10, createdAt: now.addingTimeInterval(-200), lastUsed: now.addingTimeInterval(-120)),
             TestData.makeQRCode(title: "Gamma", data: "https://gamma.com", type: .wifi, tags: ["work", "personal"], isFavorite: true, scanCount: 1, createdAt: now.addingTimeInterval(-100), lastUsed: now.addingTimeInterval(-180), folderName: "Network"),
         ]
+    }
+
+    // MARK: - QRFullscreenView initial index (tap → correct card)
+
+    func test_fullscreenInitialIndex_tappedMiddleCard_resolvesItsPosition() {
+        let codes = makeSampleCodes()
+        let tapped = codes[1]
+        XCTAssertEqual(QRFullscreenView.initialIndex(for: tapped, in: codes), 1)
+    }
+
+    func test_fullscreenInitialIndex_tappedLastCard_resolvesItsPosition() {
+        let codes = makeSampleCodes()
+        XCTAssertEqual(QRFullscreenView.initialIndex(for: codes[2], in: codes), 2)
+    }
+
+    func test_fullscreenInitialIndex_cardNotInList_fallsBackToZero() {
+        let codes = makeSampleCodes()
+        let stray = TestData.makeQRCode(title: "Stray")
+        XCTAssertEqual(QRFullscreenView.initialIndex(for: stray, in: codes), 0)
     }
 
     // MARK: - filteredAndSorted — view modes
