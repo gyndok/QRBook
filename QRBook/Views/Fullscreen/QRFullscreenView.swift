@@ -1,3 +1,4 @@
+import Photos
 import SwiftUI
 import SwiftData
 
@@ -12,6 +13,7 @@ struct QRFullscreenView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var showEditSheet = false
     @State private var showHistory = false
+    @State private var showPhotoSaveError = false
 
     private var currentQR: QRCode {
         guard currentIndex >= 0, currentIndex < allQRCodes.count else { return qrCode }
@@ -177,6 +179,16 @@ struct QRFullscreenView: View {
                     }
             }
         }
+        .alert("Couldn't Save Photo", isPresented: $showPhotoSaveError) {
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Allow photo library access in Settings to save QR codes.")
+        }
     }
 
     private func toggleBrightness() {
@@ -205,7 +217,19 @@ struct QRFullscreenView: View {
             backgroundHex: currentQR.backgroundHex,
             logoImageData: currentQR.logoImageData
         ) else { return }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        HapticManager.success()
+        // UIImageWriteToSavedPhotosAlbum with no completion fails silently
+        // when photo-add permission is denied while the haptic still signals
+        // success; performChanges reports the real outcome.
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        }) { success, _ in
+            DispatchQueue.main.async {
+                if success {
+                    HapticManager.success()
+                } else {
+                    showPhotoSaveError = true
+                }
+            }
+        }
     }
 }

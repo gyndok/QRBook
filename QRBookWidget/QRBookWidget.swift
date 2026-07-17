@@ -52,7 +52,7 @@ struct QRBookWidgetSmallView: View {
 
     var body: some View {
         VStack(spacing: 4) {
-            if let image = generateWidgetQR(from: entry.data, size: 100) {
+            if let image = generateWidgetQR(from: entry.data, size: 100, foregroundHex: entry.foregroundHex, backgroundHex: entry.backgroundHex) {
                 Image(uiImage: image)
                     .interpolation(.none)
                     .resizable()
@@ -72,7 +72,7 @@ struct QRBookWidgetMediumView: View {
 
     var body: some View {
         HStack {
-            if let image = generateWidgetQR(from: entry.data, size: 120) {
+            if let image = generateWidgetQR(from: entry.data, size: 120, foregroundHex: entry.foregroundHex, backgroundHex: entry.backgroundHex) {
                 Image(uiImage: image)
                     .interpolation(.none)
                     .resizable()
@@ -123,15 +123,39 @@ struct QRBookWidget: Widget {
     }
 }
 
-func generateWidgetQR(from string: String, size: CGFloat) -> UIImage? {
+func generateWidgetQR(from string: String, size: CGFloat, foregroundHex: String = "", backgroundHex: String = "") -> UIImage? {
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
     guard let data = string.data(using: .utf8) else { return nil }
     filter.message = data
     filter.correctionLevel = "M"
-    guard let ciImage = filter.outputImage else { return nil }
+    guard var ciImage = filter.outputImage else { return nil }
+
+    // Honor the custom colors the app exports with each favorite.
+    if !foregroundHex.isEmpty || !backgroundHex.isEmpty {
+        let colorFilter = CIFilter.falseColor()
+        colorFilter.inputImage = ciImage
+        colorFilter.color0 = ciColor(fromHex: foregroundHex, fallback: CIColor.black)
+        colorFilter.color1 = ciColor(fromHex: backgroundHex, fallback: CIColor.white)
+        if let colored = colorFilter.outputImage {
+            ciImage = colored
+        }
+    }
+
     let scale = size / ciImage.extent.size.width
     let scaled = ciImage.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
     guard let cgImage = context.createCGImage(scaled, from: scaled.extent) else { return nil }
     return UIImage(cgImage: cgImage)
+}
+
+private func ciColor(fromHex hex: String, fallback: CIColor) -> CIColor {
+    let trimmed = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+    guard trimmed.count == 6 else { return fallback }
+    var value: UInt64 = 0
+    guard Scanner(string: trimmed).scanHexInt64(&value) else { return fallback }
+    return CIColor(
+        red: CGFloat((value & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((value & 0x00FF00) >> 8) / 255.0,
+        blue: CGFloat(value & 0x0000FF) / 255.0
+    )
 }

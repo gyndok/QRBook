@@ -163,6 +163,30 @@ final class QRDataDecoderTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    func test_decodeCalendarEvent_allDay_exclusiveDtendBecomesInclusive() {
+        let data = "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:20260315\nDTEND;VALUE=DATE:20260316\nEND:VEVENT\nEND:VCALENDAR"
+        let result = QRDataDecoder.decodeCalendarEvent(from: data)
+        let end = Calendar.current.dateComponents([.year, .month, .day], from: result?.endDate ?? .distantPast)
+        XCTAssertEqual(end.month, 3)
+        XCTAssertEqual(end.day, 15)
+    }
+
+    func test_roundTrip_allDayEvent_preservesEndDate() {
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 6
+        components.day = 10
+        let day = Calendar.current.date(from: components)!
+        var event = TestData.makeCalendarEventData(allDay: true)
+        event.startDate = day
+        event.endDate = day
+        let encoded = QRDataEncoder.encodeCalendarEvent(event)
+        let decoded = QRDataDecoder.decodeCalendarEvent(from: encoded)
+        let end = Calendar.current.dateComponents([.month, .day], from: decoded?.endDate ?? .distantPast)
+        XCTAssertEqual(end.month, 6)
+        XCTAssertEqual(end.day, 10)
+    }
+
     func test_decodeCalendarEvent_crlfLineEndings_parsesDates() {
         let data = "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20260315T090000\r\nSUMMARY:Meeting\r\nEND:VEVENT\r\nEND:VCALENDAR"
         let result = QRDataDecoder.decodeCalendarEvent(from: data)
@@ -211,6 +235,18 @@ final class QRDataDecoderTests: XCTestCase {
     func test_decodePayment_unsupportedType_returnsOriginal() {
         let result = QRDataDecoder.decodePayment(from: "some data", type: .text)
         XCTAssertEqual(result, "some data")
+    }
+
+    func test_decodePayment_paypalShortLink_extractsUsername() {
+        let result = QRDataDecoder.decodePayment(from: "https://paypal.me/johndoe", type: .paypal)
+        XCTAssertEqual(result, "johndoe")
+    }
+
+    func test_decodePayment_prefixOnlyStripped_notMidStringOccurrences() {
+        // A payload merely containing the prefix elsewhere must not be mangled.
+        let data = "note about https://venmo.com/other"
+        let result = QRDataDecoder.decodePayment(from: data, type: .venmo)
+        XCTAssertEqual(result, data)
     }
 
     // MARK: - Round-trip tests

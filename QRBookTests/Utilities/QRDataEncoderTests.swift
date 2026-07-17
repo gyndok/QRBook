@@ -160,6 +160,22 @@ final class QRDataEncoderTests: XCTestCase {
         XCTAssertFalse(result.contains("LOCATION:"))
     }
 
+    func test_encodeCalendarEvent_allDay_dtendIsExclusiveNextDay() {
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 3
+        components.day = 15
+        let day = Calendar.current.date(from: components)!
+        var event = TestData.makeCalendarEventData(allDay: true)
+        event.startDate = day
+        event.endDate = day
+        let result = QRDataEncoder.encodeCalendarEvent(event)
+        // RFC 5545: DTEND for all-day events is exclusive, so a one-day
+        // event ends the following day.
+        XCTAssertTrue(result.contains("DTSTART;VALUE=DATE:20260315"))
+        XCTAssertTrue(result.contains("DTEND;VALUE=DATE:20260316"), "got: \(result)")
+    }
+
     func test_encodeCalendarEvent_hasCorrectStructure() {
         let event = TestData.makeCalendarEventData()
         let result = QRDataEncoder.encodeCalendarEvent(event)

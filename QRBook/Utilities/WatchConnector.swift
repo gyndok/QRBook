@@ -3,6 +3,14 @@ import WatchConnectivity
 class WatchConnector: NSObject, ObservableObject, WCSessionDelegate {
     static let shared = WatchConnector()
 
+    /// updateApplicationContext payloads have a system size cap; PNG images
+    /// at ~2-3 KB each keep this many comfortably under it.
+    private static let maxSyncedFavorites = 20
+
+    /// Payload cached when sendFavorites is called before session activation
+    /// completes (e.g. a favorite toggled right after launch).
+    private var pendingContext: [String: Any]?
+
     override init() {
         super.init()
         if WCSession.isSupported() {
@@ -12,8 +20,7 @@ class WatchConnector: NSObject, ObservableObject, WCSessionDelegate {
     }
 
     func sendFavorites(_ favorites: [QRCode]) {
-        guard WCSession.default.activationState == .activated else { return }
-        let items = favorites.map { qr -> [String: String] in
+        let items = favorites.prefix(Self.maxSyncedFavorites).map { qr -> [String: String] in
             var item = ["id": qr.id.uuidString, "title": qr.title, "data": qr.data, "type": qr.typeRaw]
             // watchOS has no CoreImage, so the QR image is rendered here and shipped as PNG.
             // Plain black-on-white at 200px keeps each entry to a few KB.
@@ -24,10 +31,21 @@ class WatchConnector: NSObject, ObservableObject, WCSessionDelegate {
             return item
         }
         guard let data = try? JSONSerialization.data(withJSONObject: items) else { return }
-        try? WCSession.default.updateApplicationContext(["favorites": data])
+        let context: [String: Any] = ["favorites": data]
+
+        guard WCSession.default.activationState == .activated else {
+            pendingContext = context
+            return
+        }
+        try? WCSession.default.updateApplicationContext(context)
     }
 
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if activationState == .activated, let pending = pendingContext {
+            pendingContext = nil
+            try? WCSession.default.updateApplicationContext(pending)
+        }
+    }
     func sessionDidBecomeInactive(_ session: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) {
         WCSession.default.activate()

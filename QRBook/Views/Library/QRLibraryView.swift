@@ -337,6 +337,8 @@ struct QRLibraryView: View {
     private func batchDelete() {
         for qr in qrCodes where viewModel.selectedIds.contains(qr.id) {
             SpotlightIndexer.removeQRCode(id: qr.id)
+            let deletedId = qr.id
+            try? modelContext.delete(model: ScanEvent.self, where: #Predicate { $0.qrCodeId == deletedId })
             modelContext.delete(qr)
         }
         DataSyncManager.syncFavorites(context: modelContext)

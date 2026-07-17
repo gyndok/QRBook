@@ -250,6 +250,9 @@ enum BulkImportService {
         }
 
         let size = item.size ?? 512
+        if size < 64 || size > 4096 {
+            return .failure(BulkImportError(index: index + 1, title: title, message: "Size must be between 64 and 4096 pixels"))
+        }
         let tags = item.tags ?? []
         let isFavorite = item.is_favorite ?? false
 

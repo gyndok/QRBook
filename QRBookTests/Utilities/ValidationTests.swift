@@ -81,6 +81,20 @@ final class ValidationTests: XCTestCase {
         XCTAssertTrue(Validation.normalizeURL("google.com").hasPrefix("https://"))
     }
 
+    func test_normalizeURL_uppercaseScheme_unchanged() {
+        XCTAssertEqual(Validation.normalizeURL("HTTP://example.com"), "HTTP://example.com")
+    }
+
+    func test_normalizeURL_otherSchemes_unchanged() {
+        XCTAssertEqual(Validation.normalizeURL("mailto:me@example.com"), "mailto:me@example.com")
+        XCTAssertEqual(Validation.normalizeURL("ftp://files.example.com"), "ftp://files.example.com")
+        XCTAssertEqual(Validation.normalizeURL("tel:+15551234"), "tel:+15551234")
+    }
+
+    func test_normalizeURL_hostWithPort_addsHTTPS() {
+        XCTAssertEqual(Validation.normalizeURL("example.com:8080/path"), "https://example.com:8080/path")
+    }
+
     // MARK: - validateText
 
     func test_validateText_emptyString_returnsError() {

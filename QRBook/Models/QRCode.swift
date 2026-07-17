@@ -154,7 +154,7 @@ final class QRCode {
         tags: [String] = [],
         isFavorite: Bool = false,
         errorCorrection: ErrorCorrectionLevel = .M,
-        sizePx: Int = 300,
+        sizePx: Int = 512,
         oneTimeUse: Bool = false,
         expiresAt: Date? = nil,
         scanCount: Int = 0,

@@ -3,10 +3,17 @@ import SwiftData
 
 struct QRHistoryView: View {
     let qrCodeId: UUID
-    @Query private var allEvents: [ScanEvent]
+    @Query private var events: [ScanEvent]
 
-    private var events: [ScanEvent] {
-        allEvents.filter { $0.qrCodeId == qrCodeId }.sorted { $0.timestamp > $1.timestamp }
+    init(qrCodeId: UUID) {
+        self.qrCodeId = qrCodeId
+        // Scope the query to this code instead of fetching every event and
+        // filtering in memory — history grows unboundedly over time.
+        _events = Query(
+            filter: #Predicate<ScanEvent> { $0.qrCodeId == qrCodeId },
+            sort: \ScanEvent.timestamp,
+            order: .reverse
+        )
     }
 
     var body: some View {

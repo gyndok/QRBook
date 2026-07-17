@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 struct SettingsView: View {
     @AppStorage("defaultSize") private var defaultSize = 512

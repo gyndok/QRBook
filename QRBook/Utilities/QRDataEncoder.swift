@@ -200,10 +200,12 @@ enum QRDataEncoder {
         lines.append("BEGIN:VEVENT")
 
         if event.allDay {
-            // All-day events use DATE format (yyyyMMdd)
+            // All-day events use DATE format (yyyyMMdd). Per RFC 5545, DTEND
+            // is exclusive, so the stored inclusive end date shifts by one day.
             let formatter = icalDateFormatter("yyyyMMdd")
+            let exclusiveEnd = Calendar.current.date(byAdding: .day, value: 1, to: event.endDate) ?? event.endDate
             let startStr = formatter.string(from: event.startDate)
-            let endStr = formatter.string(from: event.endDate)
+            let endStr = formatter.string(from: exclusiveEnd)
             lines.append("DTSTART;VALUE=DATE:\(startStr)")
             lines.append("DTEND;VALUE=DATE:\(endStr)")
         } else {

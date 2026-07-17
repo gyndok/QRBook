@@ -19,11 +19,17 @@ struct Validation {
         return nil
     }
 
-    /// Adds https:// if no scheme is present.
+    /// Adds https:// if no scheme is present. Existing schemes of any case
+    /// (HTTP://, mailto:, tel:) are left untouched; a host:port like
+    /// "example.com:8080" is not mistaken for a scheme.
     static func normalizeURL(_ url: String) -> String {
         let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
-            return trimmed
+        if let match = trimmed.range(of: "^[A-Za-z][A-Za-z0-9+.-]*:", options: .regularExpression) {
+            let firstSegment = trimmed[match.upperBound...].prefix(while: { $0 != "/" })
+            let looksLikePort = !firstSegment.isEmpty && firstSegment.allSatisfy(\.isNumber)
+            if !looksLikePort {
+                return trimmed
+            }
         }
         return "https://\(trimmed)"
     }

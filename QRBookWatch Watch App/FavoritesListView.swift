@@ -54,7 +54,7 @@ struct FavoritesListView: View {
                         description: Text("Favorite QR codes on your iPhone to see them here.")
                     )
                 } else {
-                    List(sessionManager.favorites, id: \.["id"]) { item in
+                    List(sessionManager.favorites, id: \.self) { item in
                         NavigationLink {
                             WatchQRFullscreenView(
                                 imageData: item["image"].flatMap { Data(base64Encoded: $0) },

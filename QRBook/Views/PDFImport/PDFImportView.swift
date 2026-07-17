@@ -12,6 +12,7 @@ struct PDFImportView: View {
     @State private var showDocumentPicker = false
     @State private var showPaywall = false
     @State private var editingCandidate: ImportCandidate?
+    @State private var pickerScanTask: Task<Void, Never>?
 
     /// Optional pre-loaded PDF URL (from Share Extension).
     var preloadedPDFURL: URL?
@@ -44,8 +45,13 @@ struct PDFImportView: View {
             }
             .sheet(isPresented: $showDocumentPicker) {
                 DocumentPicker { url in
-                    Task { await viewModel.scanPDF(url: url) }
+                    pickerScanTask = Task { await viewModel.scanPDF(url: url) }
                 }
+            }
+            .onDisappear {
+                // Without this, dismissing mid-scan leaves page rendering and
+                // Vision detection running in the background.
+                pickerScanTask?.cancel()
             }
             .sheet(isPresented: $showPaywall) { PaywallView() }
             .sheet(item: $editingCandidate) { candidate in
@@ -370,7 +376,8 @@ private struct EditCandidateView: View {
 
     private func addTag() {
         let trimmed = newTag.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, !candidate.tags.contains(trimmed) else { return }
+        guard Validation.validateTag(trimmed) == nil,
+              !candidate.tags.contains(trimmed) else { return }
         candidate.tags.append(trimmed)
         newTag = ""
     }

@@ -72,8 +72,9 @@ enum QRDataDecoder {
                     event.startDate = d
                 }
             } else if line.hasPrefix("DTEND;VALUE=DATE:") {
+                // iCal all-day DTEND is exclusive; store the inclusive last day.
                 if let d = QRDataEncoder.icalDateFormatter("yyyyMMdd").date(from: String(line.dropFirst(17))) {
-                    event.endDate = d
+                    event.endDate = Calendar.current.date(byAdding: .day, value: -1, to: d) ?? d
                 }
             } else if line.hasPrefix("DTSTART:") {
                 if let d = parseICalDateTime(String(line.dropFirst(8))) {
@@ -102,15 +103,30 @@ enum QRDataDecoder {
     static func decodePayment(from data: String, type: QRType) -> String {
         switch type {
         case .venmo:
-            return data.replacingOccurrences(of: "https://venmo.com/", with: "")
+            return strippingFirstPrefix(data, ["https://venmo.com/", "http://venmo.com/"])
         case .paypal:
-            return data.replacingOccurrences(of: "https://www.paypal.com/paypalme/", with: "")
+            return strippingFirstPrefix(data, [
+                "https://www.paypal.com/paypalme/",
+                "https://paypal.com/paypalme/",
+                "https://paypal.me/",
+                "http://paypal.me/"
+            ])
         case .cashapp:
-            return data.replacingOccurrences(of: "https://cash.app/$", with: "")
+            return strippingFirstPrefix(data, ["https://cash.app/$", "https://cash.app/"])
         case .zelle:
-            return data.replacingOccurrences(of: "Zelle: ", with: "")
+            return strippingFirstPrefix(data, ["Zelle: "])
         default:
             return data
         }
+    }
+
+    /// Removes the first matching prefix (case-insensitive). A prefix strip
+    /// can't mangle payloads that merely contain the substring elsewhere,
+    /// unlike a global replace.
+    private static func strippingFirstPrefix(_ value: String, _ prefixes: [String]) -> String {
+        for prefix in prefixes where value.lowercased().hasPrefix(prefix.lowercased()) {
+            return String(value.dropFirst(prefix.count))
+        }
+        return value
     }
 }

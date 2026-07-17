@@ -233,6 +233,12 @@ struct CreateQRView: View {
             showPaywall = true
             return
         }
+        // Prefilled types (scanner save, share import) bypass the type-picker
+        // gate, so Pro types must also be checked at save time.
+        if viewModel.selectedType.isPro && !storeManager.isProUnlocked {
+            showPaywall = true
+            return
+        }
         guard viewModel.validate() else { return }
         isCreating = true
 

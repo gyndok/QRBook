@@ -151,9 +151,15 @@ struct PaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    let price = storeManager.products.first?.displayPrice ?? "$6.99"
-                    Text("Unlock PRO — \(price)")
-                        .fontWeight(.semibold)
+                    // No hardcoded fallback price — it would be wrong for
+                    // non-USD storefronts and after any price change.
+                    if let price = storeManager.products.first?.displayPrice {
+                        Text("Unlock PRO — \(price)")
+                            .fontWeight(.semibold)
+                    } else {
+                        Text("Unlock PRO")
+                            .fontWeight(.semibold)
+                    }
                 }
             }
             .frame(maxWidth: .infinity)

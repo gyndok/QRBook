@@ -160,6 +160,10 @@ struct QRCardView: View {
             Divider()
             Button(role: .destructive) {
                 SpotlightIndexer.removeQRCode(id: qrCode.id)
+                // ScanEvent has no cascade relationship; orphaned events
+                // accumulate forever unless removed with their code.
+                let deletedId = qrCode.id
+                try? modelContext.delete(model: ScanEvent.self, where: #Predicate { $0.qrCodeId == deletedId })
                 modelContext.delete(qrCode)
                 DataSyncManager.syncFavorites(context: modelContext)
             } label: { Label("Delete", systemImage: "trash") }

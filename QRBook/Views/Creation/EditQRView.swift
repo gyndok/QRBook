@@ -6,6 +6,7 @@ struct EditQRView: View {
     @Bindable var qrCode: QRCode
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreManager.self) private var storeManager
     @Query(sort: \Folder.sortOrder) private var folders: [Folder]
     @State private var viewModel: QRCreationViewModel
 
@@ -117,10 +118,14 @@ struct EditQRView: View {
                         }
                         Toggle("Add to Favorites", isOn: $viewModel.isFavorite)
                         Toggle("Brightness Boost", isOn: $viewModel.brightnessBoostDefault)
-                        ColorPicker("QR Foreground", selection: $viewModel.foregroundColor, supportsOpacity: false)
-                            .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
-                        ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
-                            .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                        // Custom colors are Pro-only in CreateQRView; gate the
+                        // edit path the same way.
+                        if storeManager.isProUnlocked {
+                            ColorPicker("QR Foreground", selection: $viewModel.foregroundColor, supportsOpacity: false)
+                                .onChange(of: viewModel.foregroundColor) { viewModel.syncColors() }
+                            ColorPicker("QR Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
+                                .onChange(of: viewModel.backgroundColor) { viewModel.syncColors() }
+                        }
                     }
                 }
 
