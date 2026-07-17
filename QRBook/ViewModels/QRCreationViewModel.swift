@@ -98,16 +98,18 @@ class QRCreationViewModel {
     }
 
     func syncColors() {
-        let fgComponents = UIColor(foregroundColor).cgColor.components ?? [0, 0, 0]
-        foregroundHex = String(format: "%02X%02X%02X",
-            Int((fgComponents.count > 0 ? fgComponents[0] : 0) * 255),
-            Int((fgComponents.count > 1 ? fgComponents[1] : 0) * 255),
-            Int((fgComponents.count > 2 ? fgComponents[2] : 0) * 255))
+        foregroundHex = Self.hexString(from: UIColor(foregroundColor)) ?? "000000"
+        backgroundHex = Self.hexString(from: UIColor(backgroundColor)) ?? "FFFFFF"
+    }
 
-        let bgComponents = UIColor(backgroundColor).cgColor.components ?? [1, 1, 1]
-        backgroundHex = String(format: "%02X%02X%02X",
-            Int((bgComponents.count > 0 ? bgComponents[0] : 0) * 255),
-            Int((bgComponents.count > 1 ? bgComponents[1] : 0) * 255),
-            Int((bgComponents.count > 2 ? bgComponents[2] : 0) * 255))
+    /// getRed converts grayscale/extended colorspaces to RGB; clamping guards
+    /// against extended-sRGB components outside 0...1.
+    private static func hexString(from color: UIColor) -> String? {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        guard color.getRed(&r, green: &g, blue: &b, alpha: &a) else { return nil }
+        func channel(_ value: CGFloat) -> Int {
+            Int((min(max(value, 0), 1) * 255).rounded())
+        }
+        return String(format: "%02X%02X%02X", channel(r), channel(g), channel(b))
     }
 }

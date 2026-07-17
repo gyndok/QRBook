@@ -36,10 +36,24 @@ final class QRDataEncoderTests: XCTestCase {
         XCTAssertTrue(result.contains("H:false"))
     }
 
-    func test_encodeWiFi_specialCharsInSSID_encodesCorrectly() {
+    func test_encodeWiFi_specialCharsInSSID_escapesPerSpec() {
+        // The WIFI: spec requires backslash-escaping of \ ; , : " so that
+        // scanners don't mis-split the payload on a literal separator.
         let wifi = TestData.makeWiFiData(ssid: "My WiFi: \"Best\"")
         let result = QRDataEncoder.encodeWiFi(wifi)
-        XCTAssertTrue(result.contains("S:My WiFi: \"Best\""))
+        XCTAssertTrue(result.contains("S:My WiFi\\: \\\"Best\\\";"))
+    }
+
+    func test_encodeWiFi_semicolonAndCommaInPassword_escapes() {
+        let wifi = TestData.makeWiFiData(password: "p;a,ss")
+        let result = QRDataEncoder.encodeWiFi(wifi)
+        XCTAssertTrue(result.contains("P:p\\;a\\,ss;"))
+    }
+
+    func test_encodeWiFi_backslashInPassword_escapes() {
+        let wifi = TestData.makeWiFiData(password: "a\\b")
+        let result = QRDataEncoder.encodeWiFi(wifi)
+        XCTAssertTrue(result.contains("P:a\\\\b;"))
     }
 
     func test_encodeWiFi_startsWithWIFI() {
@@ -92,6 +106,18 @@ final class QRDataEncoderTests: XCTestCase {
         XCTAssertEqual(lines.last, "END:VCARD")
     }
 
+    func test_encodeContact_semicolonInName_escapes() {
+        let contact = TestData.makeContactData(name: "Smith; John", phone: "", email: "", organization: "", url: "")
+        let result = QRDataEncoder.encodeContact(contact)
+        XCTAssertTrue(result.contains("FN:Smith\\; John"))
+    }
+
+    func test_encodeContact_commaInOrganization_escapes() {
+        let contact = TestData.makeContactData(organization: "Acme, Inc")
+        let result = QRDataEncoder.encodeContact(contact)
+        XCTAssertTrue(result.contains("ORG:Acme\\, Inc"))
+    }
+
     // MARK: - encodeCalendarEvent
 
     func test_encodeCalendarEvent_allDayEvent_usesDateFormat() {
@@ -142,6 +168,24 @@ final class QRDataEncoderTests: XCTestCase {
         XCTAssertTrue(result.contains("BEGIN:VEVENT"))
         XCTAssertTrue(result.contains("END:VEVENT"))
         XCTAssertTrue(result.contains("END:VCALENDAR"))
+    }
+
+    func test_encodeCalendarEvent_timedEvent_producesExactPosixTimestamp() {
+        // Uses en_US_POSIX so a user's 12/24-hour override can't corrupt HH.
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 3
+        components.day = 15
+        components.hour = 14
+        components.minute = 30
+        let date = Calendar.current.date(from: components)!
+        var event = TestData.makeCalendarEventData(allDay: false)
+        event.startDate = date
+        event.startTime = date
+        event.endDate = date
+        event.endTime = date
+        let result = QRDataEncoder.encodeCalendarEvent(event)
+        XCTAssertTrue(result.contains("DTSTART:20260315T143000"), "got: \(result)")
     }
 
     // MARK: - encodeVenmo

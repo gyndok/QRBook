@@ -79,36 +79,30 @@ enum PDFQRScanner {
     }
 
     private static func renderPage(_ page: PDFPage, dpi: CGFloat = 200) -> CGImage? {
+        // thumbnail(of:for:) honors the page's /Rotate attribute and mediaBox
+        // origin; rendering into a raw CGContext does not, which clips rotated
+        // pages (common in scanned documents) and hides their QR codes.
         let pageRect = page.bounds(for: .mediaBox)
         let scale = dpi / 72.0
-        let width = Int(pageRect.width * scale)
-        let height = Int(pageRect.height * scale)
+        let rotation = ((page.rotation % 360) + 360) % 360
+        let swapped = rotation == 90 || rotation == 270
+        let width = (swapped ? pageRect.height : pageRect.width) * scale
+        let height = (swapped ? pageRect.width : pageRect.height) * scale
+        guard width >= 1, height >= 1 else { return nil }
 
-        guard let context = CGContext(
-            data: nil,
-            width: width,
-            height: height,
-            bitsPerComponent: 8,
-            bytesPerRow: 0,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue
-        ) else { return nil }
-
-        context.setFillColor(UIColor.white.cgColor)
-        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
-        context.scaleBy(x: scale, y: scale)
-
-        page.draw(with: .mediaBox, to: context)
-
-        return context.makeImage()
+        let image = page.thumbnail(of: CGSize(width: width, height: height), for: .mediaBox)
+        return image.cgImage
     }
 
     private static func detectBarcodes(in image: CGImage) async throws -> [DetectedQRCode] {
         do {
-            return try detectBarcodesWithVision(in: image)
+            // Vision may lack GPU/ANE support (e.g. on Simulator), which can
+            // surface either as a thrown error or as silently empty results —
+            // fall back to CIDetector in both cases before reporting none.
+            let visionResults = try detectBarcodesWithVision(in: image)
+            if !visionResults.isEmpty { return visionResults }
+            return detectBarcodesWithCIDetector(in: image)
         } catch {
-            // Vision framework may not have GPU/ANE support (e.g. on Simulator).
-            // Fall back to CIDetector which works everywhere.
             return detectBarcodesWithCIDetector(in: image)
         }
     }
@@ -119,7 +113,7 @@ enum PDFQRScanner {
 
         try handler.perform([request])
 
-        let results = (request.results as? [VNBarcodeObservation]) ?? []
+        let results = request.results ?? []
         return results.compactMap { observation -> DetectedQRCode? in
             guard let payload = observation.payloadStringValue else { return nil }
             return DetectedQRCode(

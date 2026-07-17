@@ -48,6 +48,19 @@ final class QRDataDecoderTests: XCTestCase {
         XCTAssertFalse(result?.hidden ?? true)
     }
 
+    func test_decodeWiFi_escapedSpecialChars_unescapes() {
+        let data = "WIFI:T:WPA;S:Cafe\\;Guest;P:p\\;a\\,ss\\:w\\\"ord;H:false;;"
+        let result = QRDataDecoder.decodeWiFi(from: data)
+        XCTAssertEqual(result?.ssid, "Cafe;Guest")
+        XCTAssertEqual(result?.password, "p;a,ss:w\"ord")
+    }
+
+    func test_decodeWiFi_escapedBackslash_unescapes() {
+        let data = "WIFI:T:WPA;S:Net;P:a\\\\b;H:false;;"
+        let result = QRDataDecoder.decodeWiFi(from: data)
+        XCTAssertEqual(result?.password, "a\\b")
+    }
+
     // MARK: - decodeContact
 
     func test_decodeContact_validVCard_returnsContactData() {
@@ -88,6 +101,21 @@ final class QRDataDecoderTests: XCTestCase {
         let data = "BEGIN:VCARD\nTEL;TYPE=WORK:555-9876\nEND:VCARD"
         let result = QRDataDecoder.decodeContact(from: data)
         XCTAssertEqual(result?.phone, "555-9876")
+    }
+
+    func test_decodeContact_crlfLineEndings_noTrailingCarriageReturns() {
+        // RFC-compliant vCards from external generators use CRLF line endings.
+        let data = "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:John Doe\r\nORG:Acme Inc\r\nEND:VCARD"
+        let result = QRDataDecoder.decodeContact(from: data)
+        XCTAssertEqual(result?.name, "John Doe")
+        XCTAssertEqual(result?.organization, "Acme Inc")
+    }
+
+    func test_decodeContact_escapedFields_unescapes() {
+        let data = "BEGIN:VCARD\nFN:Smith\\; John\nORG:Acme\\, Inc\nEND:VCARD"
+        let result = QRDataDecoder.decodeContact(from: data)
+        XCTAssertEqual(result?.name, "Smith; John")
+        XCTAssertEqual(result?.organization, "Acme, Inc")
     }
 
     // MARK: - decodeCalendarEvent
@@ -133,6 +161,29 @@ final class QRDataDecoderTests: XCTestCase {
     func test_decodeCalendarEvent_invalidPrefix_returnsNil() {
         let result = QRDataDecoder.decodeCalendarEvent(from: "Not a calendar event")
         XCTAssertNil(result)
+    }
+
+    func test_decodeCalendarEvent_crlfLineEndings_parsesDates() {
+        let data = "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART:20260315T090000\r\nSUMMARY:Meeting\r\nEND:VEVENT\r\nEND:VCALENDAR"
+        let result = QRDataDecoder.decodeCalendarEvent(from: data)
+        XCTAssertEqual(result?.title, "Meeting")
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour], from: result?.startDate ?? .distantPast)
+        XCTAssertEqual(components.year, 2026)
+        XCTAssertEqual(components.month, 3)
+        XCTAssertEqual(components.day, 15)
+        XCTAssertEqual(components.hour, 9)
+    }
+
+    func test_decodeCalendarEvent_utcZSuffix_parsesAsUTC() {
+        let data = "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART:20260315T140000Z\nEND:VEVENT\nEND:VCALENDAR"
+        let result = QRDataDecoder.decodeCalendarEvent(from: data)
+        var utcCalendar = Calendar(identifier: .gregorian)
+        utcCalendar.timeZone = TimeZone(identifier: "UTC")!
+        let components = utcCalendar.dateComponents([.year, .month, .day, .hour], from: result?.startDate ?? .distantPast)
+        XCTAssertEqual(components.year, 2026)
+        XCTAssertEqual(components.month, 3)
+        XCTAssertEqual(components.day, 15)
+        XCTAssertEqual(components.hour, 14)
     }
 
     // MARK: - decodePayment
@@ -183,6 +234,22 @@ final class QRDataDecoderTests: XCTestCase {
         XCTAssertEqual(decoded?.email, original.email)
         XCTAssertEqual(decoded?.organization, original.organization)
         XCTAssertEqual(decoded?.url, original.url)
+    }
+
+    func test_roundTrip_wifi_specialChars_encodeAndDecode() {
+        let original = TestData.makeWiFiData(ssid: "Cafe;Guest", password: "p;a,ss:w\"or\\d", security: .WPA)
+        let encoded = QRDataEncoder.encodeWiFi(original)
+        let decoded = QRDataDecoder.decodeWiFi(from: encoded)
+        XCTAssertEqual(decoded?.ssid, original.ssid)
+        XCTAssertEqual(decoded?.password, original.password)
+    }
+
+    func test_roundTrip_contact_specialChars_encodeAndDecode() {
+        let original = TestData.makeContactData(name: "Smith; John", organization: "Acme, Inc")
+        let encoded = QRDataEncoder.encodeContact(original)
+        let decoded = QRDataDecoder.decodeContact(from: encoded)
+        XCTAssertEqual(decoded?.name, original.name)
+        XCTAssertEqual(decoded?.organization, original.organization)
     }
 
     func test_roundTrip_venmo_encodeAndDecode() {

@@ -113,6 +113,25 @@ final class PDFQRScannerTests: XCTestCase {
         XCTAssertTrue(payloads.contains("https://b.com"))
     }
 
+    func test_scanPDF_rotatedPage_detectsQRCode() async throws {
+        // Scanned documents commonly carry a /Rotate 90 page attribute;
+        // rendering must honor it or the QR is clipped/warped and missed.
+        let payload = "https://example.com/rotated"
+        let originalURL = createPDFWithQRCode(payload: payload)
+        defer { try? FileManager.default.removeItem(at: originalURL) }
+
+        let document = try XCTUnwrap(PDFDocument(url: originalURL))
+        let page = try XCTUnwrap(document.page(at: 0))
+        page.rotation = 90
+        let rotatedURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("test-rotated-\(UUID()).pdf")
+        document.write(to: rotatedURL)
+        defer { try? FileManager.default.removeItem(at: rotatedURL) }
+
+        let results = try await PDFQRScanner.scanPDF(url: rotatedURL)
+        XCTAssertEqual(results.first?.payload, payload)
+    }
+
     func test_scanPDF_invalidURL_throwsError() async {
         let fakeURL = URL(fileURLWithPath: "/nonexistent/file.pdf")
         do {

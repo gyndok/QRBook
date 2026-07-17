@@ -201,7 +201,13 @@ enum BulkImportService {
         }
 
         if successCount > 0 {
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                return BulkImportResult(successCount: 0, errors: errors + [
+                    BulkImportError(index: 0, title: nil, message: "Failed to save imported codes: \(error.localizedDescription)")
+                ])
+            }
         }
 
         return BulkImportResult(successCount: successCount, errors: errors)

@@ -1,3 +1,4 @@
+import SwiftUI
 import XCTest
 @testable import QRBook
 
@@ -13,6 +14,26 @@ final class QRCreationViewModelTests: XCTestCase {
     override func tearDown() {
         vm = nil
         super.tearDown()
+    }
+
+    // MARK: - syncColors()
+
+    func test_syncColors_defaultBlackOnWhite_producesCorrectHex() {
+        // .black / .white are grayscale colors whose cgColor has [white, alpha]
+        // components — naive RGB indexing turns white into yellow (FFFF00).
+        vm.foregroundColor = .black
+        vm.backgroundColor = .white
+        vm.syncColors()
+        XCTAssertEqual(vm.foregroundHex, "000000")
+        XCTAssertEqual(vm.backgroundHex, "FFFFFF")
+    }
+
+    func test_syncColors_rgbColors_produceCorrectHex() {
+        vm.foregroundColor = Color(red: 1, green: 0, blue: 0)
+        vm.backgroundColor = Color(red: 0, green: 0, blue: 1)
+        vm.syncColors()
+        XCTAssertEqual(vm.foregroundHex, "FF0000")
+        XCTAssertEqual(vm.backgroundHex, "0000FF")
     }
 
     // MARK: - validate() — title

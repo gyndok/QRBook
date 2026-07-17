@@ -2,6 +2,15 @@ import Foundation
 
 enum QRDataDecoder {
 
+    /// Normalizes CRLF / lone CR line endings (used by RFC-compliant external
+    /// generators) to LF, then splits into lines.
+    private static func normalizedLines(from data: String) -> [String] {
+        data
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+            .components(separatedBy: "\n")
+    }
+
     static func decodeWiFi(from data: String) -> WiFiData? {
         guard data.hasPrefix("WIFI:") else { return nil }
         var ssid = "", password = ""
@@ -9,15 +18,15 @@ enum QRDataDecoder {
         var security: WiFiData.Security = .WPA
 
         let content = String(data.dropFirst(5))
-        let parts = content.components(separatedBy: ";")
+        let parts = QRFieldEscaping.splitUnescaped(content, on: ";")
         for part in parts {
             if part.hasPrefix("T:") {
                 let val = String(part.dropFirst(2))
                 security = WiFiData.Security(rawValue: val) ?? .WPA
             } else if part.hasPrefix("S:") {
-                ssid = String(part.dropFirst(2))
+                ssid = QRFieldEscaping.unescapeWiFi(String(part.dropFirst(2)))
             } else if part.hasPrefix("P:") {
-                password = String(part.dropFirst(2))
+                password = QRFieldEscaping.unescapeWiFi(String(part.dropFirst(2)))
             } else if part.hasPrefix("H:") {
                 hidden = String(part.dropFirst(2)).lowercased() == "true"
             }
@@ -28,10 +37,9 @@ enum QRDataDecoder {
     static func decodeContact(from data: String) -> ContactData? {
         guard data.contains("BEGIN:VCARD") else { return nil }
         var contact = ContactData()
-        let lines = data.components(separatedBy: "\n")
-        for line in lines {
+        for line in normalizedLines(from: data) {
             if line.hasPrefix("FN:") {
-                contact.name = String(line.dropFirst(3))
+                contact.name = QRFieldEscaping.unescapeText(String(line.dropFirst(3)))
             } else if line.hasPrefix("TEL") {
                 if let colonIdx = line.firstIndex(of: ":") {
                     contact.phone = String(line[line.index(after: colonIdx)...])
@@ -39,7 +47,7 @@ enum QRDataDecoder {
             } else if line.hasPrefix("EMAIL:") {
                 contact.email = String(line.dropFirst(6))
             } else if line.hasPrefix("ORG:") {
-                contact.organization = String(line.dropFirst(4))
+                contact.organization = QRFieldEscaping.unescapeText(String(line.dropFirst(4)))
             } else if line.hasPrefix("URL:") {
                 contact.url = String(line.dropFirst(4))
             }
@@ -50,42 +58,45 @@ enum QRDataDecoder {
     static func decodeCalendarEvent(from data: String) -> CalendarEventData? {
         guard data.contains("BEGIN:VEVENT") else { return nil }
         var event = CalendarEventData()
-        let lines = data.components(separatedBy: "\n")
-        let dateFormatter = DateFormatter()
 
-        for line in lines {
+        for line in normalizedLines(from: data) {
             if line.hasPrefix("SUMMARY:") {
-                event.title = String(line.dropFirst(8))
+                event.title = QRFieldEscaping.unescapeText(String(line.dropFirst(8)))
             } else if line.hasPrefix("LOCATION:") {
-                event.location = String(line.dropFirst(9))
+                event.location = QRFieldEscaping.unescapeText(String(line.dropFirst(9)))
             } else if line.hasPrefix("DESCRIPTION:") {
-                event.eventDescription = String(line.dropFirst(12))
+                event.eventDescription = QRFieldEscaping.unescapeText(String(line.dropFirst(12)))
             } else if line.hasPrefix("DTSTART;VALUE=DATE:") {
                 event.allDay = true
-                dateFormatter.dateFormat = "yyyyMMdd"
-                if let d = dateFormatter.date(from: String(line.dropFirst(19))) {
+                if let d = QRDataEncoder.icalDateFormatter("yyyyMMdd").date(from: String(line.dropFirst(19))) {
                     event.startDate = d
                 }
             } else if line.hasPrefix("DTEND;VALUE=DATE:") {
-                dateFormatter.dateFormat = "yyyyMMdd"
-                if let d = dateFormatter.date(from: String(line.dropFirst(17))) {
+                if let d = QRDataEncoder.icalDateFormatter("yyyyMMdd").date(from: String(line.dropFirst(17))) {
                     event.endDate = d
                 }
             } else if line.hasPrefix("DTSTART:") {
-                dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
-                if let d = dateFormatter.date(from: String(line.dropFirst(8))) {
+                if let d = parseICalDateTime(String(line.dropFirst(8))) {
                     event.startDate = d
                     event.startTime = d
                 }
             } else if line.hasPrefix("DTEND:") {
-                dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
-                if let d = dateFormatter.date(from: String(line.dropFirst(6))) {
+                if let d = parseICalDateTime(String(line.dropFirst(6))) {
                     event.endDate = d
                     event.endTime = d
                 }
             }
         }
         return event
+    }
+
+    /// Parses an iCal date-time value in either local (`yyyyMMdd'T'HHmmss`)
+    /// or UTC (`...Z`) form.
+    private static func parseICalDateTime(_ value: String) -> Date? {
+        if value.hasSuffix("Z") {
+            return QRDataEncoder.icalDateFormatter("yyyyMMdd'T'HHmmss'Z'", utc: true).date(from: value)
+        }
+        return QRDataEncoder.icalDateFormatter("yyyyMMdd'T'HHmmss").date(from: value)
     }
 
     static func decodePayment(from data: String, type: QRType) -> String {

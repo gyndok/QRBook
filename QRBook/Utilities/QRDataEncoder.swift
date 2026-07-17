@@ -40,15 +40,115 @@ struct CalendarEventData {
     var allDay: Bool = false
 }
 
+// MARK: - Field Escaping
+
+/// Escaping rules shared by the WIFI: format (backslash before \ ; , : ")
+/// and vCard/iCalendar TEXT values (backslash before \ ; , and \n for newlines).
+enum QRFieldEscaping {
+
+    static func escapeWiFi(_ value: String) -> String {
+        var out = ""
+        for ch in value {
+            if "\\;,:\"".contains(ch) { out.append("\\") }
+            out.append(ch)
+        }
+        return out
+    }
+
+    static func escapeText(_ value: String) -> String {
+        var out = ""
+        for ch in value {
+            switch ch {
+            case "\\", ";", ",":
+                out.append("\\")
+                out.append(ch)
+            case "\n":
+                out.append("\\n")
+            default:
+                out.append(ch)
+            }
+        }
+        return out
+    }
+
+    static func unescapeWiFi(_ value: String) -> String {
+        var out = ""
+        var escaped = false
+        for ch in value {
+            if escaped {
+                out.append(ch)
+                escaped = false
+            } else if ch == "\\" {
+                escaped = true
+            } else {
+                out.append(ch)
+            }
+        }
+        return out
+    }
+
+    static func unescapeText(_ value: String) -> String {
+        var out = ""
+        var escaped = false
+        for ch in value {
+            if escaped {
+                out.append(ch == "n" || ch == "N" ? "\n" : String(ch))
+                escaped = false
+            } else if ch == "\\" {
+                escaped = true
+            } else {
+                out.append(ch)
+            }
+        }
+        return out
+    }
+
+    /// Splits on `separator`, ignoring separators preceded by a backslash.
+    /// Escape sequences are preserved in the returned parts.
+    static func splitUnescaped(_ value: String, on separator: Character) -> [String] {
+        var parts: [String] = []
+        var current = ""
+        var escaped = false
+        for ch in value {
+            if escaped {
+                current.append(ch)
+                escaped = false
+            } else if ch == "\\" {
+                current.append(ch)
+                escaped = true
+            } else if ch == separator {
+                parts.append(current)
+                current = ""
+            } else {
+                current.append(ch)
+            }
+        }
+        parts.append(current)
+        return parts
+    }
+}
+
 // MARK: - QR Data Encoder
 
 enum QRDataEncoder {
+
+    /// Fixed-format iCal dates must use en_US_POSIX so a user's 12/24-hour
+    /// override can't rewrite HH patterns (Apple QA1480).
+    static func icalDateFormatter(_ format: String, utc: Bool = false) -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        if utc { formatter.timeZone = TimeZone(identifier: "UTC") }
+        formatter.dateFormat = format
+        return formatter
+    }
 
     // MARK: - WiFi
 
     static func encodeWiFi(_ wifi: WiFiData) -> String {
         let hidden = wifi.hidden ? "true" : "false"
-        return "WIFI:T:\(wifi.security.rawValue);S:\(wifi.ssid);P:\(wifi.password);H:\(hidden);;"
+        let ssid = QRFieldEscaping.escapeWiFi(wifi.ssid)
+        let password = QRFieldEscaping.escapeWiFi(wifi.password)
+        return "WIFI:T:\(wifi.security.rawValue);S:\(ssid);P:\(password);H:\(hidden);;"
     }
 
     // MARK: - Contact (vCard 3.0)
@@ -59,13 +159,15 @@ enum QRDataEncoder {
         lines.append("VERSION:3.0")
 
         if !contact.name.isEmpty {
-            lines.append("FN:\(contact.name)")
+            lines.append("FN:\(QRFieldEscaping.escapeText(contact.name))")
             // Attempt a simple LAST;FIRST split on space
             let parts = contact.name.split(separator: " ", maxSplits: 1)
             if parts.count == 2 {
-                lines.append("N:\(parts[1]);\(parts[0]);;;")
+                let last = QRFieldEscaping.escapeText(String(parts[1]))
+                let first = QRFieldEscaping.escapeText(String(parts[0]))
+                lines.append("N:\(last);\(first);;;")
             } else {
-                lines.append("N:\(contact.name);;;;")
+                lines.append("N:\(QRFieldEscaping.escapeText(contact.name));;;;")
             }
         }
 
@@ -78,7 +180,7 @@ enum QRDataEncoder {
         }
 
         if !contact.organization.isEmpty {
-            lines.append("ORG:\(contact.organization)")
+            lines.append("ORG:\(QRFieldEscaping.escapeText(contact.organization))")
         }
 
         if !contact.url.isEmpty {
@@ -92,8 +194,6 @@ enum QRDataEncoder {
     // MARK: - Calendar Event (iCalendar)
 
     static func encodeCalendarEvent(_ event: CalendarEventData) -> String {
-        let formatter = DateFormatter()
-
         var lines: [String] = []
         lines.append("BEGIN:VCALENDAR")
         lines.append("VERSION:2.0")
@@ -101,7 +201,7 @@ enum QRDataEncoder {
 
         if event.allDay {
             // All-day events use DATE format (yyyyMMdd)
-            formatter.dateFormat = "yyyyMMdd"
+            let formatter = icalDateFormatter("yyyyMMdd")
             let startStr = formatter.string(from: event.startDate)
             let endStr = formatter.string(from: event.endDate)
             lines.append("DTSTART;VALUE=DATE:\(startStr)")
@@ -130,7 +230,7 @@ enum QRDataEncoder {
             endCombined.minute = endTimeComponents.minute
             endCombined.second = endTimeComponents.second
 
-            formatter.dateFormat = "yyyyMMdd'T'HHmmss"
+            let formatter = icalDateFormatter("yyyyMMdd'T'HHmmss")
             if let start = calendar.date(from: startCombined) {
                 lines.append("DTSTART:\(formatter.string(from: start))")
             }
@@ -140,15 +240,15 @@ enum QRDataEncoder {
         }
 
         if !event.title.isEmpty {
-            lines.append("SUMMARY:\(event.title)")
+            lines.append("SUMMARY:\(QRFieldEscaping.escapeText(event.title))")
         }
 
         if !event.location.isEmpty {
-            lines.append("LOCATION:\(event.location)")
+            lines.append("LOCATION:\(QRFieldEscaping.escapeText(event.location))")
         }
 
         if !event.eventDescription.isEmpty {
-            lines.append("DESCRIPTION:\(event.eventDescription)")
+            lines.append("DESCRIPTION:\(QRFieldEscaping.escapeText(event.eventDescription))")
         }
 
         lines.append("END:VEVENT")
