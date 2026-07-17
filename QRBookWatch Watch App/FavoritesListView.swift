@@ -56,7 +56,10 @@ struct FavoritesListView: View {
                 } else {
                     List(sessionManager.favorites, id: \.["id"]) { item in
                         NavigationLink {
-                            WatchQRFullscreenView(data: item["data"] ?? "", title: item["title"] ?? "")
+                            WatchQRFullscreenView(
+                                imageData: item["image"].flatMap { Data(base64Encoded: $0) },
+                                title: item["title"] ?? ""
+                            )
                         } label: {
                             Text(item["title"] ?? "QR Code")
                         }

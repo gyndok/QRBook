@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44CC02512F5B714F00CCA54B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 44CC02502F5B714F00CCA54B /* PrivacyInfo.xcprivacy */; };
+		44CC02512F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 44CC02502F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy */; };
 		BB000001 /* QRBookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000001 /* QRBookApp.swift */; };
 		BB000002 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002 /* QRCode.swift */; };
 		BB000003 /* QRGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000003 /* QRGenerator.swift */; };
@@ -75,6 +75,9 @@
 		BB000114 /* PDFImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000114 /* PDFImportViewModel.swift */; };
 		BB000115 /* PDFImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000115 /* PDFImportViewModelTests.swift */; };
 		BB000116 /* PDFImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000116 /* PDFImportView.swift */; };
+		AA000901 /* QRBookShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000002 /* QRBookShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA000902 /* QRBookWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000003 /* QRBookWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA000903 /* QRBookWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AA000004 /* QRBookWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +102,13 @@
 			remoteGlobalIDString = AA000100;
 			remoteInfo = QRBook;
 		};
+		AA000807 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA000011 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA000103;
+			remoteInfo = "QRBookWatch Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -108,14 +118,27 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				AA000901 /* QRBookShareExtension.appex in Embed Foundation Extensions */,
+				AA000902 /* QRBookWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000910 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				AA000903 /* QRBookWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		44CC02502F5B714F00CCA54B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		44CC02502F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QRBook/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA000001 /* QRBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000002 /* QRBookShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QRBookShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000003 /* QRBookWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QRBookWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,7 +260,7 @@
 		AA000010 = {
 			isa = PBXGroup;
 			children = (
-				44CC02502F5B714F00CCA54B /* PrivacyInfo.xcprivacy */,
+				44CC02502F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy */,
 				AA000020 /* QRBook */,
 				DD000020 /* QRBookTests */,
 				DD000013 /* QRBookShareExtension */,
@@ -446,14 +469,6 @@
 			path = Flyers;
 			sourceTree = "<group>";
 		};
-		DD000018 /* PDFImport */ = {
-			isa = PBXGroup;
-			children = (
-				CC000116 /* PDFImportView.swift */,
-			);
-			path = PDFImport;
-			sourceTree = "<group>";
-		};
 		DD000017 /* QRBookWatch Watch App */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,6 +478,14 @@
 				CC000083 /* Assets.xcassets */,
 			);
 			path = "QRBookWatch Watch App";
+			sourceTree = "<group>";
+		};
+		DD000018 /* PDFImport */ = {
+			isa = PBXGroup;
+			children = (
+				CC000116 /* PDFImportView.swift */,
+			);
+			path = PDFImport;
 			sourceTree = "<group>";
 		};
 		DD000020 /* QRBookTests */ = {
@@ -545,12 +568,14 @@
 				AA000300 /* Frameworks */,
 				AA000400 /* Resources */,
 				AA000900 /* Embed Foundation Extensions */,
+				AA000910 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				AA000802 /* PBXTargetDependency */,
 				AA000804 /* PBXTargetDependency */,
+				AA000808 /* PBXTargetDependency */,
 			);
 			name = QRBook;
 			packageProductDependencies = (
@@ -683,7 +708,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44CC02512F5B714F00CCA54B /* PrivacyInfo.xcprivacy in Resources */,
+				44CC02512F5B714F00CCA54B /* QRBook/PrivacyInfo.xcprivacy in Resources */,
 				BB000020 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -838,6 +863,11 @@
 			target = AA000100 /* QRBook */;
 			targetProxy = AA000805 /* PBXContainerItemProxy */;
 		};
+		AA000808 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA000103 /* QRBookWatch Watch App */;
+			targetProxy = AA000807 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -848,7 +878,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
@@ -865,7 +895,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -881,7 +911,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = QRBook/QRBook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
@@ -898,7 +928,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gyndok.QRBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1092,6 +1122,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NJ4JGW72MW;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRBookWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = QRBookWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1118,6 +1149,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NJ4JGW72MW;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QRBookWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = QRBookWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1147,6 +1179,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.gyndok.QRBook;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1175,6 +1208,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "QR Snap Vault";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.gyndok.QRBook;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

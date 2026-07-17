@@ -14,7 +14,14 @@ class WatchConnector: NSObject, ObservableObject, WCSessionDelegate {
     func sendFavorites(_ favorites: [QRCode]) {
         guard WCSession.default.activationState == .activated else { return }
         let items = favorites.map { qr -> [String: String] in
-            ["id": qr.id.uuidString, "title": qr.title, "data": qr.data, "type": qr.typeRaw]
+            var item = ["id": qr.id.uuidString, "title": qr.title, "data": qr.data, "type": qr.typeRaw]
+            // watchOS has no CoreImage, so the QR image is rendered here and shipped as PNG.
+            // Plain black-on-white at 200px keeps each entry to a few KB.
+            if let image = QRGenerator.generateQRCode(from: qr.data, size: 200),
+               let png = image.pngData() {
+                item["image"] = png.base64EncodedString()
+            }
+            return item
         }
         guard let data = try? JSONSerialization.data(withJSONObject: items) else { return }
         try? WCSession.default.updateApplicationContext(["favorites": data])

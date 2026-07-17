@@ -12,10 +12,25 @@ class ShareViewController: UIViewController {
         }
 
         for provider in itemProviders {
-            if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.url.identifier) { [weak self] item, _ in
+            // PDF must be checked before URL: a shared PDF arrives as a file URL,
+            // which conforms to public.url and would be captured as a "url" import.
+            if provider.hasItemConformingToTypeIdentifier(UTType.pdf.identifier) {
+                provider.loadItem(forTypeIdentifier: UTType.pdf.identifier) { [weak self] item, _ in
                     if let url = item as? URL {
+                        self?.copyPDFToAppGroup(from: url)
+                    } else if let data = item as? Data {
+                        self?.savePDFDataToAppGroup(data)
+                    } else {
+                        DispatchQueue.main.async { self?.close() }
+                    }
+                }
+                return
+            } else if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+                provider.loadItem(forTypeIdentifier: UTType.url.identifier) { [weak self] item, _ in
+                    if let url = item as? URL, !url.isFileURL {
                         self?.saveSharedItem(data: url.absoluteString, type: "url")
+                    } else {
+                        DispatchQueue.main.async { self?.close() }
                     }
                 }
                 return
@@ -23,13 +38,10 @@ class ShareViewController: UIViewController {
                 provider.loadItem(forTypeIdentifier: UTType.plainText.identifier) { [weak self] item, _ in
                     if let text = item as? String {
                         self?.saveSharedItem(data: text, type: "text")
-                    }
-                }
-                return
-            } else if provider.hasItemConformingToTypeIdentifier(UTType.pdf.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.pdf.identifier) { [weak self] item, _ in
-                    if let url = item as? URL {
-                        self?.copyPDFToAppGroup(from: url)
+                    } else if let data = item as? Data, let text = String(data: data, encoding: .utf8) {
+                        self?.saveSharedItem(data: text, type: "text")
+                    } else {
+                        DispatchQueue.main.async { self?.close() }
                     }
                 }
                 return
@@ -71,7 +83,27 @@ class ShareViewController: UIViewController {
         }
 
         let destURL = containerURL.appendingPathComponent("shared-pdf-\(UUID().uuidString).pdf")
+        let accessing = sourceURL.startAccessingSecurityScopedResource()
         try? FileManager.default.copyItem(at: sourceURL, to: destURL)
+        if accessing {
+            sourceURL.stopAccessingSecurityScopedResource()
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.close()
+        }
+    }
+
+    private func savePDFDataToAppGroup(_ data: Data) {
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "group.com.gyndok.QRBook"
+        ) else {
+            DispatchQueue.main.async { [weak self] in self?.close() }
+            return
+        }
+
+        let destURL = containerURL.appendingPathComponent("shared-pdf-\(UUID().uuidString).pdf")
+        try? data.write(to: destURL)
 
         DispatchQueue.main.async { [weak self] in
             self?.close()
